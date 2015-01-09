@@ -1,0 +1,1764 @@
+I1223 11:51:56.980412 2009993984 caffe.cpp:103] Use CPU.
+I1223 11:51:56.980989 2009993984 caffe.cpp:107] Starting Optimization
+I1223 11:51:56.981003 2009993984 solver.cpp:32] Initializing solver from parameters: 
+test_iter: 138
+test_interval: 414
+base_lr: 1e-06
+display: 414
+max_iter: 414000
+lr_policy: "step"
+gamma: 0.1
+momentum: 0.9
+weight_decay: 0.0005
+stepsize: 207000
+snapshot: 414
+snapshot_prefix: "/Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train"
+solver_mode: CPU
+net: "/Users/JamesGuo/Documents/MasterThesis/landmark/landmark_train_val.prototxt"
+snapshot_after_train: true
+I1223 11:51:56.981109 2009993984 solver.cpp:67] Creating training net from net file: /Users/JamesGuo/Documents/MasterThesis/landmark/landmark_train_val.prototxt
+I1223 11:51:56.982120 2009993984 net.cpp:275] The NetState phase (0) differed from the phase (1) specified by a rule in layer data1
+I1223 11:51:56.982156 2009993984 net.cpp:39] Initializing net from parameters: 
+name: "LandmarkDetector"
+layers {
+  top: "data"
+  top: "label"
+  name: "data1"
+  type: HDF5_DATA
+  hdf5_data_param {
+    source: "/Users/JamesGuo/Documents/MasterThesis/landmark/caffe/facelandmark_data_train_list.txt"
+    batch_size: 200
+  }
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    scale: 0.00390625
+  }
+}
+layers {
+  bottom: "data"
+  top: "conv0"
+  name: "conv0"
+  type: CONVOLUTION
+  blobs_lr: 1
+  blobs_lr: 2
+  convolution_param {
+    num_output: 16
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layers {
+  bottom: "conv0"
+  top: "pool1"
+  name: "pool1"
+  type: POOLING
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layers {
+  bottom: "pool1"
+  top: "conv2"
+  name: "conv2"
+  type: CONVOLUTION
+  blobs_lr: 1
+  blobs_lr: 2
+  convolution_param {
+    num_output: 48
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layers {
+  bottom: "conv2"
+  top: "pool3"
+  name: "pool3"
+  type: POOLING
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layers {
+  bottom: "pool3"
+  top: "conv4"
+  name: "conv4"
+  type: CONVOLUTION
+  blobs_lr: 1
+  blobs_lr: 2
+  convolution_param {
+    num_output: 64
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layers {
+  bottom: "conv4"
+  top: "pool5"
+  name: "pool5"
+  type: POOLING
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layers {
+  bottom: "pool5"
+  top: "conv6"
+  name: "conv6"
+  type: CONVOLUTION
+  blobs_lr: 1
+  blobs_lr: 2
+  convolution_param {
+    num_output: 120
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layers {
+  bottom: "conv6"
+  top: "ip1"
+  name: "ip1"
+  type: INNER_PRODUCT
+  blobs_lr: 1
+  blobs_lr: 2
+  inner_product_param {
+    num_output: 100
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layers {
+  bottom: "ip1"
+  top: "ip1"
+  name: "relu1"
+  type: RELU
+}
+layers {
+  bottom: "ip1"
+  top: "ip2"
+  name: "ip2"
+  type: INNER_PRODUCT
+  blobs_lr: 1
+  blobs_lr: 2
+  weight_decay: 1
+  weight_decay: 0
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layers {
+  bottom: "ip2"
+  bottom: "label"
+  top: "loss"
+  name: "loss"
+  type: EUCLIDEAN_LOSS
+}
+state {
+  phase: TRAIN
+}
+I1223 11:51:56.982535 2009993984 layer_factory.hpp:78] Creating layer data1
+I1223 11:51:56.982558 2009993984 net.cpp:67] Creating Layer data1
+I1223 11:51:56.982569 2009993984 net.cpp:356] data1 -> data
+I1223 11:51:56.982594 2009993984 net.cpp:356] data1 -> label
+I1223 11:51:56.982605 2009993984 net.cpp:96] Setting up data1
+I1223 11:51:56.982612 2009993984 hdf5_data_layer.cpp:63] Loading list of HDF5 filenames from: /Users/JamesGuo/Documents/MasterThesis/landmark/caffe/facelandmark_data_train_list.txt
+I1223 11:51:56.982939 2009993984 hdf5_data_layer.cpp:77] Number of HDF5 files: 1
+I1223 11:51:57.883548 2009993984 net.cpp:103] Top shape: 200 1 40 40 (320000)
+I1223 11:51:57.883569 2009993984 net.cpp:103] Top shape: 200 10 1 1 (2000)
+I1223 11:51:57.883577 2009993984 layer_factory.hpp:78] Creating layer conv0
+I1223 11:51:57.883589 2009993984 net.cpp:67] Creating Layer conv0
+I1223 11:51:57.883605 2009993984 net.cpp:394] conv0 <- data
+I1223 11:51:57.883630 2009993984 net.cpp:356] conv0 -> conv0
+I1223 11:51:57.883647 2009993984 net.cpp:96] Setting up conv0
+I1223 11:51:57.888059 2009993984 net.cpp:103] Top shape: 200 16 36 36 (4147200)
+I1223 11:51:57.888082 2009993984 layer_factory.hpp:78] Creating layer pool1
+I1223 11:51:57.888095 2009993984 net.cpp:67] Creating Layer pool1
+I1223 11:51:57.888102 2009993984 net.cpp:394] pool1 <- conv0
+I1223 11:51:57.888110 2009993984 net.cpp:356] pool1 -> pool1
+I1223 11:51:57.888119 2009993984 net.cpp:96] Setting up pool1
+I1223 11:51:57.888134 2009993984 net.cpp:103] Top shape: 200 16 18 18 (1036800)
+I1223 11:51:57.888139 2009993984 layer_factory.hpp:78] Creating layer conv2
+I1223 11:51:57.888147 2009993984 net.cpp:67] Creating Layer conv2
+I1223 11:51:57.888154 2009993984 net.cpp:394] conv2 <- pool1
+I1223 11:51:57.888165 2009993984 net.cpp:356] conv2 -> conv2
+I1223 11:51:57.888178 2009993984 net.cpp:96] Setting up conv2
+I1223 11:51:57.888247 2009993984 net.cpp:103] Top shape: 200 48 16 16 (2457600)
+I1223 11:51:57.888260 2009993984 layer_factory.hpp:78] Creating layer pool3
+I1223 11:51:57.888269 2009993984 net.cpp:67] Creating Layer pool3
+I1223 11:51:57.888277 2009993984 net.cpp:394] pool3 <- conv2
+I1223 11:51:57.888284 2009993984 net.cpp:356] pool3 -> pool3
+I1223 11:51:57.888294 2009993984 net.cpp:96] Setting up pool3
+I1223 11:51:57.888301 2009993984 net.cpp:103] Top shape: 200 48 8 8 (614400)
+I1223 11:51:57.888306 2009993984 layer_factory.hpp:78] Creating layer conv4
+I1223 11:51:57.888314 2009993984 net.cpp:67] Creating Layer conv4
+I1223 11:51:57.888320 2009993984 net.cpp:394] conv4 <- pool3
+I1223 11:51:57.888345 2009993984 net.cpp:356] conv4 -> conv4
+I1223 11:51:57.888358 2009993984 net.cpp:96] Setting up conv4
+I1223 11:51:57.888595 2009993984 net.cpp:103] Top shape: 200 64 6 6 (460800)
+I1223 11:51:57.888608 2009993984 layer_factory.hpp:78] Creating layer pool5
+I1223 11:51:57.888617 2009993984 net.cpp:67] Creating Layer pool5
+I1223 11:51:57.888623 2009993984 net.cpp:394] pool5 <- conv4
+I1223 11:51:57.888630 2009993984 net.cpp:356] pool5 -> pool5
+I1223 11:51:57.888639 2009993984 net.cpp:96] Setting up pool5
+I1223 11:51:57.888648 2009993984 net.cpp:103] Top shape: 200 64 3 3 (115200)
+I1223 11:51:57.888653 2009993984 layer_factory.hpp:78] Creating layer conv6
+I1223 11:51:57.888661 2009993984 net.cpp:67] Creating Layer conv6
+I1223 11:51:57.888666 2009993984 net.cpp:394] conv6 <- pool5
+I1223 11:51:57.888675 2009993984 net.cpp:356] conv6 -> conv6
+I1223 11:51:57.888687 2009993984 net.cpp:96] Setting up conv6
+I1223 11:51:57.889097 2009993984 net.cpp:103] Top shape: 200 120 1 1 (24000)
+I1223 11:51:57.889107 2009993984 layer_factory.hpp:78] Creating layer ip1
+I1223 11:51:57.889122 2009993984 net.cpp:67] Creating Layer ip1
+I1223 11:51:57.889129 2009993984 net.cpp:394] ip1 <- conv6
+I1223 11:51:57.889137 2009993984 net.cpp:356] ip1 -> ip1
+I1223 11:51:57.889148 2009993984 net.cpp:96] Setting up ip1
+I1223 11:51:57.889263 2009993984 net.cpp:103] Top shape: 200 100 1 1 (20000)
+I1223 11:51:57.889276 2009993984 layer_factory.hpp:78] Creating layer relu1
+I1223 11:51:57.889286 2009993984 net.cpp:67] Creating Layer relu1
+I1223 11:51:57.889292 2009993984 net.cpp:394] relu1 <- ip1
+I1223 11:51:57.889300 2009993984 net.cpp:345] relu1 -> ip1 (in-place)
+I1223 11:51:57.889308 2009993984 net.cpp:96] Setting up relu1
+I1223 11:51:57.889315 2009993984 net.cpp:103] Top shape: 200 100 1 1 (20000)
+I1223 11:51:57.889320 2009993984 layer_factory.hpp:78] Creating layer ip2
+I1223 11:51:57.889328 2009993984 net.cpp:67] Creating Layer ip2
+I1223 11:51:57.889334 2009993984 net.cpp:394] ip2 <- ip1
+I1223 11:51:57.889343 2009993984 net.cpp:356] ip2 -> ip2
+I1223 11:51:57.889353 2009993984 net.cpp:96] Setting up ip2
+I1223 11:51:57.889410 2009993984 net.cpp:103] Top shape: 200 10 1 1 (2000)
+I1223 11:51:57.889428 2009993984 layer_factory.hpp:78] Creating layer loss
+I1223 11:51:57.889441 2009993984 net.cpp:67] Creating Layer loss
+I1223 11:51:57.889447 2009993984 net.cpp:394] loss <- ip2
+I1223 11:51:57.889454 2009993984 net.cpp:394] loss <- label
+I1223 11:51:57.889463 2009993984 net.cpp:356] loss -> loss
+I1223 11:51:57.889473 2009993984 net.cpp:96] Setting up loss
+I1223 11:51:57.889482 2009993984 net.cpp:103] Top shape: 1 1 1 1 (1)
+I1223 11:51:57.889492 2009993984 net.cpp:109]     with loss weight 1
+I1223 11:51:57.889508 2009993984 net.cpp:170] loss needs backward computation.
+I1223 11:51:57.889513 2009993984 net.cpp:170] ip2 needs backward computation.
+I1223 11:51:57.889518 2009993984 net.cpp:170] relu1 needs backward computation.
+I1223 11:51:57.889523 2009993984 net.cpp:170] ip1 needs backward computation.
+I1223 11:51:57.889528 2009993984 net.cpp:170] conv6 needs backward computation.
+I1223 11:51:57.889533 2009993984 net.cpp:170] pool5 needs backward computation.
+I1223 11:51:57.889536 2009993984 net.cpp:170] conv4 needs backward computation.
+I1223 11:51:57.889540 2009993984 net.cpp:170] pool3 needs backward computation.
+I1223 11:51:57.889544 2009993984 net.cpp:170] conv2 needs backward computation.
+I1223 11:51:57.889549 2009993984 net.cpp:170] pool1 needs backward computation.
+I1223 11:51:57.889554 2009993984 net.cpp:170] conv0 needs backward computation.
+I1223 11:51:57.889559 2009993984 net.cpp:172] data1 does not need backward computation.
+I1223 11:51:57.889564 2009993984 net.cpp:208] This network produces output loss
+I1223 11:51:57.889580 2009993984 net.cpp:467] Collecting Learning Rate and Weight Decay.
+I1223 11:51:57.889591 2009993984 net.cpp:219] Network initialization done.
+I1223 11:51:57.889598 2009993984 net.cpp:220] Memory required for data: 36880004
+I1223 11:51:57.890501 2009993984 solver.cpp:151] Creating test net (#0) specified by net file: /Users/JamesGuo/Documents/MasterThesis/landmark/landmark_train_val.prototxt
+I1223 11:51:57.890545 2009993984 net.cpp:275] The NetState phase (1) differed from the phase (0) specified by a rule in layer data1
+I1223 11:51:57.890568 2009993984 net.cpp:39] Initializing net from parameters: 
+name: "LandmarkDetector"
+layers {
+  top: "data"
+  top: "label"
+  name: "data1"
+  type: HDF5_DATA
+  hdf5_data_param {
+    source: "/Users/JamesGuo/Documents/MasterThesis/landmark/caffe/facelandmark_data_test_list.txt"
+    batch_size: 200
+  }
+  include {
+    phase: TEST
+  }
+  transform_param {
+    scale: 0.00390625
+  }
+}
+layers {
+  bottom: "data"
+  top: "conv0"
+  name: "conv0"
+  type: CONVOLUTION
+  blobs_lr: 1
+  blobs_lr: 2
+  convolution_param {
+    num_output: 16
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layers {
+  bottom: "conv0"
+  top: "pool1"
+  name: "pool1"
+  type: POOLING
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layers {
+  bottom: "pool1"
+  top: "conv2"
+  name: "conv2"
+  type: CONVOLUTION
+  blobs_lr: 1
+  blobs_lr: 2
+  convolution_param {
+    num_output: 48
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layers {
+  bottom: "conv2"
+  top: "pool3"
+  name: "pool3"
+  type: POOLING
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layers {
+  bottom: "pool3"
+  top: "conv4"
+  name: "conv4"
+  type: CONVOLUTION
+  blobs_lr: 1
+  blobs_lr: 2
+  convolution_param {
+    num_output: 64
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layers {
+  bottom: "conv4"
+  top: "pool5"
+  name: "pool5"
+  type: POOLING
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layers {
+  bottom: "pool5"
+  top: "conv6"
+  name: "conv6"
+  type: CONVOLUTION
+  blobs_lr: 1
+  blobs_lr: 2
+  convolution_param {
+    num_output: 120
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layers {
+  bottom: "conv6"
+  top: "ip1"
+  name: "ip1"
+  type: INNER_PRODUCT
+  blobs_lr: 1
+  blobs_lr: 2
+  inner_product_param {
+    num_output: 100
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layers {
+  bottom: "ip1"
+  top: "ip1"
+  name: "relu1"
+  type: RELU
+}
+layers {
+  bottom: "ip1"
+  top: "ip2"
+  name: "ip2"
+  type: INNER_PRODUCT
+  blobs_lr: 1
+  blobs_lr: 2
+  weight_decay: 1
+  weight_decay: 0
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layers {
+  bottom: "ip2"
+  bottom: "label"
+  top: "loss"
+  name: "loss"
+  type: EUCLIDEAN_LOSS
+}
+state {
+  phase: TEST
+}
+I1223 11:51:57.890960 2009993984 layer_factory.hpp:78] Creating layer data1
+I1223 11:51:57.890974 2009993984 net.cpp:67] Creating Layer data1
+I1223 11:51:57.890982 2009993984 net.cpp:356] data1 -> data
+I1223 11:51:57.890995 2009993984 net.cpp:356] data1 -> label
+I1223 11:51:57.891005 2009993984 net.cpp:96] Setting up data1
+I1223 11:51:57.891012 2009993984 hdf5_data_layer.cpp:63] Loading list of HDF5 filenames from: /Users/JamesGuo/Documents/MasterThesis/landmark/caffe/facelandmark_data_test_list.txt
+I1223 11:51:57.891358 2009993984 hdf5_data_layer.cpp:77] Number of HDF5 files: 1
+I1223 11:51:58.188298 2009993984 net.cpp:103] Top shape: 200 1 40 40 (320000)
+I1223 11:51:58.188319 2009993984 net.cpp:103] Top shape: 200 10 1 1 (2000)
+I1223 11:51:58.188326 2009993984 layer_factory.hpp:78] Creating layer conv0
+I1223 11:51:58.188339 2009993984 net.cpp:67] Creating Layer conv0
+I1223 11:51:58.188344 2009993984 net.cpp:394] conv0 <- data
+I1223 11:51:58.188354 2009993984 net.cpp:356] conv0 -> conv0
+I1223 11:51:58.188366 2009993984 net.cpp:96] Setting up conv0
+I1223 11:51:58.188390 2009993984 net.cpp:103] Top shape: 200 16 36 36 (4147200)
+I1223 11:51:58.188402 2009993984 layer_factory.hpp:78] Creating layer pool1
+I1223 11:51:58.188411 2009993984 net.cpp:67] Creating Layer pool1
+I1223 11:51:58.188417 2009993984 net.cpp:394] pool1 <- conv0
+I1223 11:51:58.188426 2009993984 net.cpp:356] pool1 -> pool1
+I1223 11:51:58.188436 2009993984 net.cpp:96] Setting up pool1
+I1223 11:51:58.188442 2009993984 net.cpp:103] Top shape: 200 16 18 18 (1036800)
+I1223 11:51:58.188447 2009993984 layer_factory.hpp:78] Creating layer conv2
+I1223 11:51:58.188455 2009993984 net.cpp:67] Creating Layer conv2
+I1223 11:51:58.188462 2009993984 net.cpp:394] conv2 <- pool1
+I1223 11:51:58.188469 2009993984 net.cpp:356] conv2 -> conv2
+I1223 11:51:58.188482 2009993984 net.cpp:96] Setting up conv2
+I1223 11:51:58.188549 2009993984 net.cpp:103] Top shape: 200 48 16 16 (2457600)
+I1223 11:51:58.188558 2009993984 layer_factory.hpp:78] Creating layer pool3
+I1223 11:51:58.188567 2009993984 net.cpp:67] Creating Layer pool3
+I1223 11:51:58.188575 2009993984 net.cpp:394] pool3 <- conv2
+I1223 11:51:58.188583 2009993984 net.cpp:356] pool3 -> pool3
+I1223 11:51:58.188592 2009993984 net.cpp:96] Setting up pool3
+I1223 11:51:58.188599 2009993984 net.cpp:103] Top shape: 200 48 8 8 (614400)
+I1223 11:51:58.188606 2009993984 layer_factory.hpp:78] Creating layer conv4
+I1223 11:51:58.188612 2009993984 net.cpp:67] Creating Layer conv4
+I1223 11:51:58.188618 2009993984 net.cpp:394] conv4 <- pool3
+I1223 11:51:58.188627 2009993984 net.cpp:356] conv4 -> conv4
+I1223 11:51:58.188637 2009993984 net.cpp:96] Setting up conv4
+I1223 11:51:58.188860 2009993984 net.cpp:103] Top shape: 200 64 6 6 (460800)
+I1223 11:51:58.188871 2009993984 layer_factory.hpp:78] Creating layer pool5
+I1223 11:51:58.188879 2009993984 net.cpp:67] Creating Layer pool5
+I1223 11:51:58.188885 2009993984 net.cpp:394] pool5 <- conv4
+I1223 11:51:58.188894 2009993984 net.cpp:356] pool5 -> pool5
+I1223 11:51:58.188902 2009993984 net.cpp:96] Setting up pool5
+I1223 11:51:58.188910 2009993984 net.cpp:103] Top shape: 200 64 3 3 (115200)
+I1223 11:51:58.188916 2009993984 layer_factory.hpp:78] Creating layer conv6
+I1223 11:51:58.188923 2009993984 net.cpp:67] Creating Layer conv6
+I1223 11:51:58.188928 2009993984 net.cpp:394] conv6 <- pool5
+I1223 11:51:58.188962 2009993984 net.cpp:356] conv6 -> conv6
+I1223 11:51:58.188976 2009993984 net.cpp:96] Setting up conv6
+I1223 11:51:58.189388 2009993984 net.cpp:103] Top shape: 200 120 1 1 (24000)
+I1223 11:51:58.189399 2009993984 layer_factory.hpp:78] Creating layer ip1
+I1223 11:51:58.189409 2009993984 net.cpp:67] Creating Layer ip1
+I1223 11:51:58.189414 2009993984 net.cpp:394] ip1 <- conv6
+I1223 11:51:58.189424 2009993984 net.cpp:356] ip1 -> ip1
+I1223 11:51:58.189434 2009993984 net.cpp:96] Setting up ip1
+I1223 11:51:58.189543 2009993984 net.cpp:103] Top shape: 200 100 1 1 (20000)
+I1223 11:51:58.189554 2009993984 layer_factory.hpp:78] Creating layer relu1
+I1223 11:51:58.189561 2009993984 net.cpp:67] Creating Layer relu1
+I1223 11:51:58.189568 2009993984 net.cpp:394] relu1 <- ip1
+I1223 11:51:58.189574 2009993984 net.cpp:345] relu1 -> ip1 (in-place)
+I1223 11:51:58.189584 2009993984 net.cpp:96] Setting up relu1
+I1223 11:51:58.189589 2009993984 net.cpp:103] Top shape: 200 100 1 1 (20000)
+I1223 11:51:58.189595 2009993984 layer_factory.hpp:78] Creating layer ip2
+I1223 11:51:58.189604 2009993984 net.cpp:67] Creating Layer ip2
+I1223 11:51:58.189609 2009993984 net.cpp:394] ip2 <- ip1
+I1223 11:51:58.189617 2009993984 net.cpp:356] ip2 -> ip2
+I1223 11:51:58.189626 2009993984 net.cpp:96] Setting up ip2
+I1223 11:51:58.189646 2009993984 net.cpp:103] Top shape: 200 10 1 1 (2000)
+I1223 11:51:58.189654 2009993984 layer_factory.hpp:78] Creating layer loss
+I1223 11:51:58.189662 2009993984 net.cpp:67] Creating Layer loss
+I1223 11:51:58.189668 2009993984 net.cpp:394] loss <- ip2
+I1223 11:51:58.189676 2009993984 net.cpp:394] loss <- label
+I1223 11:51:58.189683 2009993984 net.cpp:356] loss -> loss
+I1223 11:51:58.189692 2009993984 net.cpp:96] Setting up loss
+I1223 11:51:58.189700 2009993984 net.cpp:103] Top shape: 1 1 1 1 (1)
+I1223 11:51:58.189707 2009993984 net.cpp:109]     with loss weight 1
+I1223 11:51:58.189719 2009993984 net.cpp:170] loss needs backward computation.
+I1223 11:51:58.189726 2009993984 net.cpp:170] ip2 needs backward computation.
+I1223 11:51:58.189730 2009993984 net.cpp:170] relu1 needs backward computation.
+I1223 11:51:58.189733 2009993984 net.cpp:170] ip1 needs backward computation.
+I1223 11:51:58.189735 2009993984 net.cpp:170] conv6 needs backward computation.
+I1223 11:51:58.189738 2009993984 net.cpp:170] pool5 needs backward computation.
+I1223 11:51:58.189741 2009993984 net.cpp:170] conv4 needs backward computation.
+I1223 11:51:58.189745 2009993984 net.cpp:170] pool3 needs backward computation.
+I1223 11:51:58.189750 2009993984 net.cpp:170] conv2 needs backward computation.
+I1223 11:51:58.189755 2009993984 net.cpp:170] pool1 needs backward computation.
+I1223 11:51:58.189760 2009993984 net.cpp:170] conv0 needs backward computation.
+I1223 11:51:58.189765 2009993984 net.cpp:172] data1 does not need backward computation.
+I1223 11:51:58.189771 2009993984 net.cpp:208] This network produces output loss
+I1223 11:51:58.189784 2009993984 net.cpp:467] Collecting Learning Rate and Weight Decay.
+I1223 11:51:58.189792 2009993984 net.cpp:219] Network initialization done.
+I1223 11:51:58.189798 2009993984 net.cpp:220] Memory required for data: 36880004
+I1223 11:51:58.189888 2009993984 solver.cpp:41] Solver scaffolding done.
+I1223 11:51:58.189896 2009993984 solver.cpp:160] Solving LandmarkDetector
+I1223 11:51:58.189901 2009993984 solver.cpp:161] Learning Rate Policy: step
+I1223 11:51:58.189942 2009993984 solver.cpp:264] Iteration 0, Testing net (#0)
+I1223 11:52:21.626206 2009993984 solver.cpp:315]     Test net output #0: loss = 61.4159 (* 1 = 61.4159 loss)
+I1223 11:52:22.037014 2009993984 solver.cpp:209] Iteration 0, loss = 61.3286
+I1223 11:52:22.037045 2009993984 solver.cpp:224]     Train net output #0: loss = 61.3286 (* 1 = 61.3286 loss)
+I1223 11:52:22.037063 2009993984 solver.cpp:445] Iteration 0, lr = 1e-06
+I1223 11:54:59.169551 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_414.caffemodel
+I1223 11:54:59.174319 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_414.solverstate
+I1223 11:54:59.177191 2009993984 solver.cpp:264] Iteration 414, Testing net (#0)
+I1223 11:55:22.701000 2009993984 solver.cpp:315]     Test net output #0: loss = 0.459111 (* 1 = 0.459111 loss)
+I1223 11:55:23.069346 2009993984 solver.cpp:209] Iteration 414, loss = 0.522601
+I1223 11:55:23.069386 2009993984 solver.cpp:224]     Train net output #0: loss = 0.522601 (* 1 = 0.522601 loss)
+I1223 11:55:23.069396 2009993984 solver.cpp:445] Iteration 414, lr = 1e-06
+I1223 11:57:58.845695 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_828.caffemodel
+I1223 11:57:58.849051 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_828.solverstate
+I1223 11:57:58.852259 2009993984 solver.cpp:264] Iteration 828, Testing net (#0)
+I1223 11:58:22.567823 2009993984 solver.cpp:315]     Test net output #0: loss = 0.329814 (* 1 = 0.329814 loss)
+I1223 11:58:22.937818 2009993984 solver.cpp:209] Iteration 828, loss = 0.369079
+I1223 11:58:22.937861 2009993984 solver.cpp:224]     Train net output #0: loss = 0.369079 (* 1 = 0.369079 loss)
+I1223 11:58:22.937871 2009993984 solver.cpp:445] Iteration 828, lr = 1e-06
+I1223 12:00:58.820057 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_1242.caffemodel
+I1223 12:00:58.825773 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_1242.solverstate
+I1223 12:00:58.831460 2009993984 solver.cpp:264] Iteration 1242, Testing net (#0)
+I1223 12:01:22.356215 2009993984 solver.cpp:315]     Test net output #0: loss = 0.271983 (* 1 = 0.271983 loss)
+I1223 12:01:22.726244 2009993984 solver.cpp:209] Iteration 1242, loss = 0.295946
+I1223 12:01:22.726285 2009993984 solver.cpp:224]     Train net output #0: loss = 0.295946 (* 1 = 0.295946 loss)
+I1223 12:01:22.726295 2009993984 solver.cpp:445] Iteration 1242, lr = 1e-06
+I1223 12:04:05.672013 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_1656.caffemodel
+I1223 12:04:05.675652 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_1656.solverstate
+I1223 12:04:05.678527 2009993984 solver.cpp:264] Iteration 1656, Testing net (#0)
+I1223 12:04:29.477728 2009993984 solver.cpp:315]     Test net output #0: loss = 0.236639 (* 1 = 0.236639 loss)
+I1223 12:04:29.860998 2009993984 solver.cpp:209] Iteration 1656, loss = 0.255638
+I1223 12:04:29.861038 2009993984 solver.cpp:224]     Train net output #0: loss = 0.255638 (* 1 = 0.255638 loss)
+I1223 12:04:29.861049 2009993984 solver.cpp:445] Iteration 1656, lr = 1e-06
+I1223 12:07:15.575024 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_2070.caffemodel
+I1223 12:07:15.583725 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_2070.solverstate
+I1223 12:07:15.587041 2009993984 solver.cpp:264] Iteration 2070, Testing net (#0)
+I1223 12:07:40.982321 2009993984 solver.cpp:315]     Test net output #0: loss = 0.212219 (* 1 = 0.212219 loss)
+I1223 12:07:41.700160 2009993984 solver.cpp:209] Iteration 2070, loss = 0.228159
+I1223 12:07:41.700197 2009993984 solver.cpp:224]     Train net output #0: loss = 0.228159 (* 1 = 0.228159 loss)
+I1223 12:07:41.700207 2009993984 solver.cpp:445] Iteration 2070, lr = 1e-06
+I1223 12:10:19.987593 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_2484.caffemodel
+I1223 12:10:19.995451 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_2484.solverstate
+I1223 12:10:19.998517 2009993984 solver.cpp:264] Iteration 2484, Testing net (#0)
+I1223 12:10:43.649348 2009993984 solver.cpp:315]     Test net output #0: loss = 0.194202 (* 1 = 0.194202 loss)
+I1223 12:10:44.016197 2009993984 solver.cpp:209] Iteration 2484, loss = 0.208224
+I1223 12:10:44.016237 2009993984 solver.cpp:224]     Train net output #0: loss = 0.208224 (* 1 = 0.208224 loss)
+I1223 12:10:44.016249 2009993984 solver.cpp:445] Iteration 2484, lr = 1e-06
+I1223 12:13:19.929604 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_2898.caffemodel
+I1223 12:13:19.933115 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_2898.solverstate
+I1223 12:13:19.936156 2009993984 solver.cpp:264] Iteration 2898, Testing net (#0)
+I1223 12:13:43.566987 2009993984 solver.cpp:315]     Test net output #0: loss = 0.180005 (* 1 = 0.180005 loss)
+I1223 12:13:43.932592 2009993984 solver.cpp:209] Iteration 2898, loss = 0.190154
+I1223 12:13:43.932633 2009993984 solver.cpp:224]     Train net output #0: loss = 0.190154 (* 1 = 0.190154 loss)
+I1223 12:13:43.932643 2009993984 solver.cpp:445] Iteration 2898, lr = 1e-06
+I1223 12:16:19.884821 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_3312.caffemodel
+I1223 12:16:19.888386 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_3312.solverstate
+I1223 12:16:19.891460 2009993984 solver.cpp:264] Iteration 3312, Testing net (#0)
+I1223 12:16:43.374378 2009993984 solver.cpp:315]     Test net output #0: loss = 0.168435 (* 1 = 0.168435 loss)
+I1223 12:16:43.741664 2009993984 solver.cpp:209] Iteration 3312, loss = 0.177434
+I1223 12:16:43.741706 2009993984 solver.cpp:224]     Train net output #0: loss = 0.177434 (* 1 = 0.177434 loss)
+I1223 12:16:43.741729 2009993984 solver.cpp:445] Iteration 3312, lr = 1e-06
+I1223 12:19:17.442417 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_3726.caffemodel
+I1223 12:19:17.445783 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_3726.solverstate
+I1223 12:19:17.448642 2009993984 solver.cpp:264] Iteration 3726, Testing net (#0)
+I1223 12:19:42.316709 2009993984 solver.cpp:315]     Test net output #0: loss = 0.158727 (* 1 = 0.158727 loss)
+I1223 12:19:42.698565 2009993984 solver.cpp:209] Iteration 3726, loss = 0.167324
+I1223 12:19:42.698606 2009993984 solver.cpp:224]     Train net output #0: loss = 0.167324 (* 1 = 0.167324 loss)
+I1223 12:19:42.698616 2009993984 solver.cpp:445] Iteration 3726, lr = 1e-06
+I1223 12:22:20.967376 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_4140.caffemodel
+I1223 12:22:20.970633 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_4140.solverstate
+I1223 12:22:20.973734 2009993984 solver.cpp:264] Iteration 4140, Testing net (#0)
+I1223 12:22:47.684592 2009993984 solver.cpp:315]     Test net output #0: loss = 0.150454 (* 1 = 0.150454 loss)
+I1223 12:22:48.143399 2009993984 solver.cpp:209] Iteration 4140, loss = 0.15908
+I1223 12:22:48.143436 2009993984 solver.cpp:224]     Train net output #0: loss = 0.15908 (* 1 = 0.15908 loss)
+I1223 12:22:48.143447 2009993984 solver.cpp:445] Iteration 4140, lr = 1e-06
+I1223 12:25:27.961787 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_4554.caffemodel
+I1223 12:25:27.964895 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_4554.solverstate
+I1223 12:25:27.967712 2009993984 solver.cpp:264] Iteration 4554, Testing net (#0)
+I1223 12:25:51.521612 2009993984 solver.cpp:315]     Test net output #0: loss = 0.143239 (* 1 = 0.143239 loss)
+I1223 12:25:51.889178 2009993984 solver.cpp:209] Iteration 4554, loss = 0.150518
+I1223 12:25:51.889217 2009993984 solver.cpp:224]     Train net output #0: loss = 0.150518 (* 1 = 0.150518 loss)
+I1223 12:25:51.889226 2009993984 solver.cpp:445] Iteration 4554, lr = 1e-06
+I1223 12:28:31.402642 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_4968.caffemodel
+I1223 12:28:31.406095 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_4968.solverstate
+I1223 12:28:31.409278 2009993984 solver.cpp:264] Iteration 4968, Testing net (#0)
+I1223 12:28:58.062978 2009993984 solver.cpp:315]     Test net output #0: loss = 0.136945 (* 1 = 0.136945 loss)
+I1223 12:28:58.454903 2009993984 solver.cpp:209] Iteration 4968, loss = 0.142389
+I1223 12:28:58.454943 2009993984 solver.cpp:224]     Train net output #0: loss = 0.142389 (* 1 = 0.142389 loss)
+I1223 12:28:58.454953 2009993984 solver.cpp:445] Iteration 4968, lr = 1e-06
+I1223 12:31:42.550361 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_5382.caffemodel
+I1223 12:31:42.553714 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_5382.solverstate
+I1223 12:31:42.556782 2009993984 solver.cpp:264] Iteration 5382, Testing net (#0)
+I1223 12:32:06.960551 2009993984 solver.cpp:315]     Test net output #0: loss = 0.131359 (* 1 = 0.131359 loss)
+I1223 12:32:07.330844 2009993984 solver.cpp:209] Iteration 5382, loss = 0.135277
+I1223 12:32:07.330884 2009993984 solver.cpp:224]     Train net output #0: loss = 0.135277 (* 1 = 0.135277 loss)
+I1223 12:32:07.330896 2009993984 solver.cpp:445] Iteration 5382, lr = 1e-06
+I1223 12:34:44.729059 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_5796.caffemodel
+I1223 12:34:44.732275 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_5796.solverstate
+I1223 12:34:44.735270 2009993984 solver.cpp:264] Iteration 5796, Testing net (#0)
+I1223 12:35:08.299455 2009993984 solver.cpp:315]     Test net output #0: loss = 0.126411 (* 1 = 0.126411 loss)
+I1223 12:35:08.680959 2009993984 solver.cpp:209] Iteration 5796, loss = 0.12881
+I1223 12:35:08.681021 2009993984 solver.cpp:224]     Train net output #0: loss = 0.12881 (* 1 = 0.12881 loss)
+I1223 12:35:08.681041 2009993984 solver.cpp:445] Iteration 5796, lr = 1e-06
+I1223 12:37:45.453155 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_6210.caffemodel
+I1223 12:37:45.456538 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_6210.solverstate
+I1223 12:37:45.459534 2009993984 solver.cpp:264] Iteration 6210, Testing net (#0)
+I1223 12:38:08.972555 2009993984 solver.cpp:315]     Test net output #0: loss = 0.12196 (* 1 = 0.12196 loss)
+I1223 12:38:09.339068 2009993984 solver.cpp:209] Iteration 6210, loss = 0.122689
+I1223 12:38:09.339118 2009993984 solver.cpp:224]     Train net output #0: loss = 0.122689 (* 1 = 0.122689 loss)
+I1223 12:38:09.339129 2009993984 solver.cpp:445] Iteration 6210, lr = 1e-06
+I1223 12:40:43.304558 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_6624.caffemodel
+I1223 12:40:43.308122 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_6624.solverstate
+I1223 12:40:43.311151 2009993984 solver.cpp:264] Iteration 6624, Testing net (#0)
+I1223 12:41:06.788213 2009993984 solver.cpp:315]     Test net output #0: loss = 0.117944 (* 1 = 0.117944 loss)
+I1223 12:41:07.155966 2009993984 solver.cpp:209] Iteration 6624, loss = 0.117837
+I1223 12:41:07.156004 2009993984 solver.cpp:224]     Train net output #0: loss = 0.117837 (* 1 = 0.117837 loss)
+I1223 12:41:07.156014 2009993984 solver.cpp:445] Iteration 6624, lr = 1e-06
+I1223 12:43:40.477805 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_7038.caffemodel
+I1223 12:43:40.484884 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_7038.solverstate
+I1223 12:43:40.487911 2009993984 solver.cpp:264] Iteration 7038, Testing net (#0)
+I1223 12:44:04.664975 2009993984 solver.cpp:315]     Test net output #0: loss = 0.114325 (* 1 = 0.114325 loss)
+I1223 12:44:05.033351 2009993984 solver.cpp:209] Iteration 7038, loss = 0.11464
+I1223 12:44:05.033395 2009993984 solver.cpp:224]     Train net output #0: loss = 0.11464 (* 1 = 0.11464 loss)
+I1223 12:44:05.033406 2009993984 solver.cpp:445] Iteration 7038, lr = 1e-06
+I1223 12:46:38.576484 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_7452.caffemodel
+I1223 12:46:38.579830 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_7452.solverstate
+I1223 12:46:38.582906 2009993984 solver.cpp:264] Iteration 7452, Testing net (#0)
+I1223 12:47:02.186156 2009993984 solver.cpp:315]     Test net output #0: loss = 0.111019 (* 1 = 0.111019 loss)
+I1223 12:47:02.553007 2009993984 solver.cpp:209] Iteration 7452, loss = 0.112164
+I1223 12:47:02.553076 2009993984 solver.cpp:224]     Train net output #0: loss = 0.112164 (* 1 = 0.112164 loss)
+I1223 12:47:02.553091 2009993984 solver.cpp:445] Iteration 7452, lr = 1e-06
+I1223 12:49:35.913347 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_7866.caffemodel
+I1223 12:49:35.918015 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_7866.solverstate
+I1223 12:49:35.921074 2009993984 solver.cpp:264] Iteration 7866, Testing net (#0)
+I1223 12:49:59.339627 2009993984 solver.cpp:315]     Test net output #0: loss = 0.107991 (* 1 = 0.107991 loss)
+I1223 12:49:59.714455 2009993984 solver.cpp:209] Iteration 7866, loss = 0.109141
+I1223 12:49:59.714495 2009993984 solver.cpp:224]     Train net output #0: loss = 0.109141 (* 1 = 0.109141 loss)
+I1223 12:49:59.714505 2009993984 solver.cpp:445] Iteration 7866, lr = 1e-06
+I1223 12:52:33.391302 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_8280.caffemodel
+I1223 12:52:33.399350 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_8280.solverstate
+I1223 12:52:33.402432 2009993984 solver.cpp:264] Iteration 8280, Testing net (#0)
+I1223 12:52:56.826971 2009993984 solver.cpp:315]     Test net output #0: loss = 0.105204 (* 1 = 0.105204 loss)
+I1223 12:52:57.201752 2009993984 solver.cpp:209] Iteration 8280, loss = 0.106475
+I1223 12:52:57.201794 2009993984 solver.cpp:224]     Train net output #0: loss = 0.106475 (* 1 = 0.106475 loss)
+I1223 12:52:57.201805 2009993984 solver.cpp:445] Iteration 8280, lr = 1e-06
+I1223 12:55:30.391777 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_8694.caffemodel
+I1223 12:55:30.395879 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_8694.solverstate
+I1223 12:55:30.399093 2009993984 solver.cpp:264] Iteration 8694, Testing net (#0)
+I1223 12:55:55.507154 2009993984 solver.cpp:315]     Test net output #0: loss = 0.102637 (* 1 = 0.102637 loss)
+I1223 12:55:56.332646 2009993984 solver.cpp:209] Iteration 8694, loss = 0.102494
+I1223 12:55:56.332809 2009993984 solver.cpp:224]     Train net output #0: loss = 0.102494 (* 1 = 0.102494 loss)
+I1223 12:55:56.332852 2009993984 solver.cpp:445] Iteration 8694, lr = 1e-06
+I1223 12:58:31.442317 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_9108.caffemodel
+I1223 12:58:31.451035 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_9108.solverstate
+I1223 12:58:31.454107 2009993984 solver.cpp:264] Iteration 9108, Testing net (#0)
+I1223 12:58:54.898677 2009993984 solver.cpp:315]     Test net output #0: loss = 0.100252 (* 1 = 0.100252 loss)
+I1223 12:58:55.269273 2009993984 solver.cpp:209] Iteration 9108, loss = 0.097937
+I1223 12:58:55.269312 2009993984 solver.cpp:224]     Train net output #0: loss = 0.097937 (* 1 = 0.097937 loss)
+I1223 12:58:55.269322 2009993984 solver.cpp:445] Iteration 9108, lr = 1e-06
+I1223 13:01:32.376351 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_9522.caffemodel
+I1223 13:01:32.379583 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_9522.solverstate
+I1223 13:01:32.382508 2009993984 solver.cpp:264] Iteration 9522, Testing net (#0)
+I1223 13:01:56.502286 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0980616 (* 1 = 0.0980616 loss)
+I1223 13:01:56.870582 2009993984 solver.cpp:209] Iteration 9522, loss = 0.09455
+I1223 13:01:56.870625 2009993984 solver.cpp:224]     Train net output #0: loss = 0.09455 (* 1 = 0.09455 loss)
+I1223 13:01:56.870636 2009993984 solver.cpp:445] Iteration 9522, lr = 1e-06
+I1223 13:04:37.365630 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_9936.caffemodel
+I1223 13:04:37.368922 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_9936.solverstate
+I1223 13:04:37.372016 2009993984 solver.cpp:264] Iteration 9936, Testing net (#0)
+I1223 13:05:00.886651 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0960231 (* 1 = 0.0960231 loss)
+I1223 13:05:01.252063 2009993984 solver.cpp:209] Iteration 9936, loss = 0.0920396
+I1223 13:05:01.252104 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0920396 (* 1 = 0.0920396 loss)
+I1223 13:05:01.252115 2009993984 solver.cpp:445] Iteration 9936, lr = 1e-06
+I1223 13:07:35.447937 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_10350.caffemodel
+I1223 13:07:35.451234 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_10350.solverstate
+I1223 13:07:35.454383 2009993984 solver.cpp:264] Iteration 10350, Testing net (#0)
+I1223 13:07:58.869228 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0941515 (* 1 = 0.0941515 loss)
+I1223 13:07:59.235270 2009993984 solver.cpp:209] Iteration 10350, loss = 0.0874826
+I1223 13:07:59.235304 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0874826 (* 1 = 0.0874826 loss)
+I1223 13:07:59.235316 2009993984 solver.cpp:445] Iteration 10350, lr = 1e-06
+I1223 13:10:33.440518 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_10764.caffemodel
+I1223 13:10:33.444216 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_10764.solverstate
+I1223 13:10:33.447298 2009993984 solver.cpp:264] Iteration 10764, Testing net (#0)
+I1223 13:10:57.821530 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0923925 (* 1 = 0.0923925 loss)
+I1223 13:10:58.191676 2009993984 solver.cpp:209] Iteration 10764, loss = 0.0850399
+I1223 13:10:58.191715 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0850399 (* 1 = 0.0850399 loss)
+I1223 13:10:58.191726 2009993984 solver.cpp:445] Iteration 10764, lr = 1e-06
+I1223 13:13:43.412343 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_11178.caffemodel
+I1223 13:13:43.415714 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_11178.solverstate
+I1223 13:13:43.418710 2009993984 solver.cpp:264] Iteration 11178, Testing net (#0)
+I1223 13:14:08.276068 2009993984 solver.cpp:315]     Test net output #0: loss = 0.09073 (* 1 = 0.09073 loss)
+I1223 13:14:08.655110 2009993984 solver.cpp:209] Iteration 11178, loss = 0.078985
+I1223 13:14:08.655151 2009993984 solver.cpp:224]     Train net output #0: loss = 0.078985 (* 1 = 0.078985 loss)
+I1223 13:14:08.655161 2009993984 solver.cpp:445] Iteration 11178, lr = 1e-06
+I1223 13:16:49.778522 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_11592.caffemodel
+I1223 13:16:49.781894 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_11592.solverstate
+I1223 13:16:49.784683 2009993984 solver.cpp:264] Iteration 11592, Testing net (#0)
+I1223 13:17:14.603075 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0891516 (* 1 = 0.0891516 loss)
+I1223 13:17:14.972013 2009993984 solver.cpp:209] Iteration 11592, loss = 0.0776753
+I1223 13:17:14.972053 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0776753 (* 1 = 0.0776753 loss)
+I1223 13:17:14.972064 2009993984 solver.cpp:445] Iteration 11592, lr = 1e-06
+I1223 13:19:59.451932 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_12006.caffemodel
+I1223 13:19:59.455445 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_12006.solverstate
+I1223 13:19:59.458708 2009993984 solver.cpp:264] Iteration 12006, Testing net (#0)
+I1223 13:20:22.992651 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0876748 (* 1 = 0.0876748 loss)
+I1223 13:20:23.358043 2009993984 solver.cpp:209] Iteration 12006, loss = 0.0754835
+I1223 13:20:23.358120 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0754835 (* 1 = 0.0754835 loss)
+I1223 13:20:23.358137 2009993984 solver.cpp:445] Iteration 12006, lr = 1e-06
+I1223 13:22:58.192901 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_12420.caffemodel
+I1223 13:22:58.197607 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_12420.solverstate
+I1223 13:22:58.199489 2009993984 solver.cpp:264] Iteration 12420, Testing net (#0)
+I1223 13:23:12.940343 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0862791 (* 1 = 0.0862791 loss)
+I1223 13:23:13.166898 2009993984 solver.cpp:209] Iteration 12420, loss = 0.0734176
+I1223 13:23:13.166930 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0734176 (* 1 = 0.0734176 loss)
+I1223 13:23:13.166937 2009993984 solver.cpp:445] Iteration 12420, lr = 1e-06
+I1223 13:24:46.066107 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_12834.caffemodel
+I1223 13:24:46.070502 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_12834.solverstate
+I1223 13:24:46.072383 2009993984 solver.cpp:264] Iteration 12834, Testing net (#0)
+I1223 13:25:00.692569 2009993984 solver.cpp:315]     Test net output #0: loss = 0.084972 (* 1 = 0.084972 loss)
+I1223 13:25:00.918766 2009993984 solver.cpp:209] Iteration 12834, loss = 0.0712126
+I1223 13:25:00.918798 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0712126 (* 1 = 0.0712126 loss)
+I1223 13:25:00.918805 2009993984 solver.cpp:445] Iteration 12834, lr = 1e-06
+I1223 13:26:33.869832 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_13248.caffemodel
+I1223 13:26:33.872061 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_13248.solverstate
+I1223 13:26:33.873973 2009993984 solver.cpp:264] Iteration 13248, Testing net (#0)
+I1223 13:26:48.460976 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0837372 (* 1 = 0.0837372 loss)
+I1223 13:26:48.687564 2009993984 solver.cpp:209] Iteration 13248, loss = 0.0695674
+I1223 13:26:48.687598 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0695674 (* 1 = 0.0695674 loss)
+I1223 13:26:48.687607 2009993984 solver.cpp:445] Iteration 13248, lr = 1e-06
+I1223 13:28:21.253077 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_13662.caffemodel
+I1223 13:28:21.255347 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_13662.solverstate
+I1223 13:28:21.257242 2009993984 solver.cpp:264] Iteration 13662, Testing net (#0)
+I1223 13:28:35.880076 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0825842 (* 1 = 0.0825842 loss)
+I1223 13:28:36.106353 2009993984 solver.cpp:209] Iteration 13662, loss = 0.0683184
+I1223 13:28:36.106386 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0683184 (* 1 = 0.0683184 loss)
+I1223 13:28:36.106395 2009993984 solver.cpp:445] Iteration 13662, lr = 1e-06
+I1223 13:30:07.915670 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_14076.caffemodel
+I1223 13:30:07.917968 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_14076.solverstate
+I1223 13:30:07.919880 2009993984 solver.cpp:264] Iteration 14076, Testing net (#0)
+I1223 13:30:22.508527 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0814818 (* 1 = 0.0814818 loss)
+I1223 13:30:22.737026 2009993984 solver.cpp:209] Iteration 14076, loss = 0.0674997
+I1223 13:30:22.737061 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0674997 (* 1 = 0.0674997 loss)
+I1223 13:30:22.737067 2009993984 solver.cpp:445] Iteration 14076, lr = 1e-06
+I1223 13:31:54.745435 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_14490.caffemodel
+I1223 13:31:54.749861 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_14490.solverstate
+I1223 13:31:54.751956 2009993984 solver.cpp:264] Iteration 14490, Testing net (#0)
+I1223 13:32:09.391883 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0804247 (* 1 = 0.0804247 loss)
+I1223 13:32:09.618942 2009993984 solver.cpp:209] Iteration 14490, loss = 0.0649507
+I1223 13:32:09.618975 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0649507 (* 1 = 0.0649507 loss)
+I1223 13:32:09.618983 2009993984 solver.cpp:445] Iteration 14490, lr = 1e-06
+I1223 13:33:41.478255 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_14904.caffemodel
+I1223 13:33:41.480958 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_14904.solverstate
+I1223 13:33:41.482954 2009993984 solver.cpp:264] Iteration 14904, Testing net (#0)
+I1223 13:33:56.085484 2009993984 solver.cpp:315]     Test net output #0: loss = 0.07943 (* 1 = 0.07943 loss)
+I1223 13:33:56.310737 2009993984 solver.cpp:209] Iteration 14904, loss = 0.0643214
+I1223 13:33:56.310772 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0643214 (* 1 = 0.0643214 loss)
+I1223 13:33:56.310782 2009993984 solver.cpp:445] Iteration 14904, lr = 1e-06
+I1223 13:35:28.097931 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_15318.caffemodel
+I1223 13:35:28.100067 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_15318.solverstate
+I1223 13:35:28.101940 2009993984 solver.cpp:264] Iteration 15318, Testing net (#0)
+I1223 13:35:43.031440 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0785075 (* 1 = 0.0785075 loss)
+I1223 13:35:43.251981 2009993984 solver.cpp:209] Iteration 15318, loss = 0.062976
+I1223 13:35:43.252015 2009993984 solver.cpp:224]     Train net output #0: loss = 0.062976 (* 1 = 0.062976 loss)
+I1223 13:35:43.252023 2009993984 solver.cpp:445] Iteration 15318, lr = 1e-06
+I1223 13:37:15.233660 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_15732.caffemodel
+I1223 13:37:15.235823 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_15732.solverstate
+I1223 13:37:15.237692 2009993984 solver.cpp:264] Iteration 15732, Testing net (#0)
+I1223 13:37:29.832361 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0776 (* 1 = 0.0776 loss)
+I1223 13:37:30.053030 2009993984 solver.cpp:209] Iteration 15732, loss = 0.0631585
+I1223 13:37:30.053061 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0631585 (* 1 = 0.0631585 loss)
+I1223 13:37:30.053071 2009993984 solver.cpp:445] Iteration 15732, lr = 1e-06
+I1223 13:39:01.824643 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_16146.caffemodel
+I1223 13:39:01.827796 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_16146.solverstate
+I1223 13:39:01.829694 2009993984 solver.cpp:264] Iteration 16146, Testing net (#0)
+I1223 13:39:16.407585 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0767133 (* 1 = 0.0767133 loss)
+I1223 13:39:16.628037 2009993984 solver.cpp:209] Iteration 16146, loss = 0.0618817
+I1223 13:39:16.628068 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0618817 (* 1 = 0.0618817 loss)
+I1223 13:39:16.628075 2009993984 solver.cpp:445] Iteration 16146, lr = 1e-06
+I1223 13:40:48.420120 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_16560.caffemodel
+I1223 13:40:48.422281 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_16560.solverstate
+I1223 13:40:48.424139 2009993984 solver.cpp:264] Iteration 16560, Testing net (#0)
+I1223 13:41:03.039024 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0759142 (* 1 = 0.0759142 loss)
+I1223 13:41:03.259919 2009993984 solver.cpp:209] Iteration 16560, loss = 0.0589443
+I1223 13:41:03.259953 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0589443 (* 1 = 0.0589443 loss)
+I1223 13:41:03.259963 2009993984 solver.cpp:445] Iteration 16560, lr = 1e-06
+I1223 13:42:34.978759 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_16974.caffemodel
+I1223 13:42:34.980914 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_16974.solverstate
+I1223 13:42:34.982769 2009993984 solver.cpp:264] Iteration 16974, Testing net (#0)
+I1223 13:42:49.667703 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0751673 (* 1 = 0.0751673 loss)
+I1223 13:42:49.888285 2009993984 solver.cpp:209] Iteration 16974, loss = 0.0582536
+I1223 13:42:49.888319 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0582536 (* 1 = 0.0582536 loss)
+I1223 13:42:49.888327 2009993984 solver.cpp:445] Iteration 16974, lr = 1e-06
+I1223 13:44:21.531996 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_17388.caffemodel
+I1223 13:44:21.534855 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_17388.solverstate
+I1223 13:44:21.536803 2009993984 solver.cpp:264] Iteration 17388, Testing net (#0)
+I1223 13:44:36.128962 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0744375 (* 1 = 0.0744375 loss)
+I1223 13:44:36.351511 2009993984 solver.cpp:209] Iteration 17388, loss = 0.0574014
+I1223 13:44:36.351547 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0574014 (* 1 = 0.0574014 loss)
+I1223 13:44:36.351555 2009993984 solver.cpp:445] Iteration 17388, lr = 1e-06
+I1223 13:46:08.198930 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_17802.caffemodel
+I1223 13:46:08.202611 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_17802.solverstate
+I1223 13:46:08.204447 2009993984 solver.cpp:264] Iteration 17802, Testing net (#0)
+I1223 13:46:22.811286 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0737627 (* 1 = 0.0737627 loss)
+I1223 13:46:23.031548 2009993984 solver.cpp:209] Iteration 17802, loss = 0.055989
+I1223 13:46:23.031584 2009993984 solver.cpp:224]     Train net output #0: loss = 0.055989 (* 1 = 0.055989 loss)
+I1223 13:46:23.031595 2009993984 solver.cpp:445] Iteration 17802, lr = 1e-06
+I1223 13:47:54.944804 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_18216.caffemodel
+I1223 13:47:54.946975 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_18216.solverstate
+I1223 13:47:54.948899 2009993984 solver.cpp:264] Iteration 18216, Testing net (#0)
+I1223 13:48:09.560325 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0730829 (* 1 = 0.0730829 loss)
+I1223 13:48:09.781916 2009993984 solver.cpp:209] Iteration 18216, loss = 0.054828
+I1223 13:48:09.781946 2009993984 solver.cpp:224]     Train net output #0: loss = 0.054828 (* 1 = 0.054828 loss)
+I1223 13:48:09.781955 2009993984 solver.cpp:445] Iteration 18216, lr = 1e-06
+I1223 13:49:41.588307 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_18630.caffemodel
+I1223 13:49:41.590910 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_18630.solverstate
+I1223 13:49:41.592802 2009993984 solver.cpp:264] Iteration 18630, Testing net (#0)
+I1223 13:49:56.174101 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0724249 (* 1 = 0.0724249 loss)
+I1223 13:49:56.394009 2009993984 solver.cpp:209] Iteration 18630, loss = 0.0537083
+I1223 13:49:56.394043 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0537083 (* 1 = 0.0537083 loss)
+I1223 13:49:56.394052 2009993984 solver.cpp:445] Iteration 18630, lr = 1e-06
+I1223 13:51:28.255533 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_19044.caffemodel
+I1223 13:51:28.260053 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_19044.solverstate
+I1223 13:51:28.261965 2009993984 solver.cpp:264] Iteration 19044, Testing net (#0)
+I1223 13:51:42.879653 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0718025 (* 1 = 0.0718025 loss)
+I1223 13:51:43.100177 2009993984 solver.cpp:209] Iteration 19044, loss = 0.052449
+I1223 13:51:43.100209 2009993984 solver.cpp:224]     Train net output #0: loss = 0.052449 (* 1 = 0.052449 loss)
+I1223 13:51:43.100217 2009993984 solver.cpp:445] Iteration 19044, lr = 1e-06
+I1223 13:53:14.909840 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_19458.caffemodel
+I1223 13:53:14.912528 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_19458.solverstate
+I1223 13:53:14.914412 2009993984 solver.cpp:264] Iteration 19458, Testing net (#0)
+I1223 13:53:29.523912 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0712067 (* 1 = 0.0712067 loss)
+I1223 13:53:29.744495 2009993984 solver.cpp:209] Iteration 19458, loss = 0.0511014
+I1223 13:53:29.744524 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0511014 (* 1 = 0.0511014 loss)
+I1223 13:53:29.744531 2009993984 solver.cpp:445] Iteration 19458, lr = 1e-06
+I1223 13:55:01.912124 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_19872.caffemodel
+I1223 13:55:01.914795 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_19872.solverstate
+I1223 13:55:01.917593 2009993984 solver.cpp:264] Iteration 19872, Testing net (#0)
+I1223 13:55:16.527775 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0706327 (* 1 = 0.0706327 loss)
+I1223 13:55:16.747956 2009993984 solver.cpp:209] Iteration 19872, loss = 0.0499325
+I1223 13:55:16.747992 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0499325 (* 1 = 0.0499325 loss)
+I1223 13:55:16.748003 2009993984 solver.cpp:445] Iteration 19872, lr = 1e-06
+I1223 13:56:48.589826 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_20286.caffemodel
+I1223 13:56:48.595327 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_20286.solverstate
+I1223 13:56:48.597221 2009993984 solver.cpp:264] Iteration 20286, Testing net (#0)
+I1223 13:57:03.184478 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0700904 (* 1 = 0.0700904 loss)
+I1223 13:57:03.404929 2009993984 solver.cpp:209] Iteration 20286, loss = 0.0492196
+I1223 13:57:03.404963 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0492196 (* 1 = 0.0492196 loss)
+I1223 13:57:03.404970 2009993984 solver.cpp:445] Iteration 20286, lr = 1e-06
+I1223 13:58:35.102494 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_20700.caffemodel
+I1223 13:58:35.107517 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_20700.solverstate
+I1223 13:58:35.109467 2009993984 solver.cpp:264] Iteration 20700, Testing net (#0)
+I1223 13:58:49.783097 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0695533 (* 1 = 0.0695533 loss)
+I1223 13:58:50.003438 2009993984 solver.cpp:209] Iteration 20700, loss = 0.0467302
+I1223 13:58:50.003475 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0467302 (* 1 = 0.0467302 loss)
+I1223 13:58:50.003484 2009993984 solver.cpp:445] Iteration 20700, lr = 1e-06
+I1223 14:00:21.706464 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_21114.caffemodel
+I1223 14:00:21.708612 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_21114.solverstate
+I1223 14:00:21.710485 2009993984 solver.cpp:264] Iteration 21114, Testing net (#0)
+I1223 14:00:36.291779 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0690628 (* 1 = 0.0690628 loss)
+I1223 14:00:36.512286 2009993984 solver.cpp:209] Iteration 21114, loss = 0.0469732
+I1223 14:00:36.512322 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0469732 (* 1 = 0.0469732 loss)
+I1223 14:00:36.512332 2009993984 solver.cpp:445] Iteration 21114, lr = 1e-06
+I1223 14:02:08.364188 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_21528.caffemodel
+I1223 14:02:08.366425 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_21528.solverstate
+I1223 14:02:08.368337 2009993984 solver.cpp:264] Iteration 21528, Testing net (#0)
+I1223 14:02:22.953754 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0685793 (* 1 = 0.0685793 loss)
+I1223 14:02:23.174623 2009993984 solver.cpp:209] Iteration 21528, loss = 0.0466282
+I1223 14:02:23.174656 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0466282 (* 1 = 0.0466282 loss)
+I1223 14:02:23.174664 2009993984 solver.cpp:445] Iteration 21528, lr = 1e-06
+I1223 14:03:54.957335 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_21942.caffemodel
+I1223 14:03:54.959491 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_21942.solverstate
+I1223 14:03:54.961361 2009993984 solver.cpp:264] Iteration 21942, Testing net (#0)
+I1223 14:04:09.653584 2009993984 solver.cpp:315]     Test net output #0: loss = 0.068086 (* 1 = 0.068086 loss)
+I1223 14:04:09.874831 2009993984 solver.cpp:209] Iteration 21942, loss = 0.0467637
+I1223 14:04:09.874866 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0467637 (* 1 = 0.0467637 loss)
+I1223 14:04:09.874874 2009993984 solver.cpp:445] Iteration 21942, lr = 1e-06
+I1223 14:05:41.623142 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_22356.caffemodel
+I1223 14:05:41.625434 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_22356.solverstate
+I1223 14:05:41.627321 2009993984 solver.cpp:264] Iteration 22356, Testing net (#0)
+I1223 14:05:56.191488 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0676092 (* 1 = 0.0676092 loss)
+I1223 14:05:56.411777 2009993984 solver.cpp:209] Iteration 22356, loss = 0.0468696
+I1223 14:05:56.411811 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0468696 (* 1 = 0.0468696 loss)
+I1223 14:05:56.411820 2009993984 solver.cpp:445] Iteration 22356, lr = 1e-06
+I1223 14:07:28.016388 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_22770.caffemodel
+I1223 14:07:28.018535 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_22770.solverstate
+I1223 14:07:28.020395 2009993984 solver.cpp:264] Iteration 22770, Testing net (#0)
+I1223 14:07:42.628303 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0671767 (* 1 = 0.0671767 loss)
+I1223 14:07:42.849135 2009993984 solver.cpp:209] Iteration 22770, loss = 0.0469761
+I1223 14:07:42.849169 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0469761 (* 1 = 0.0469761 loss)
+I1223 14:07:42.849177 2009993984 solver.cpp:445] Iteration 22770, lr = 1e-06
+I1223 14:09:14.758736 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_23184.caffemodel
+I1223 14:09:14.761163 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_23184.solverstate
+I1223 14:09:14.763337 2009993984 solver.cpp:264] Iteration 23184, Testing net (#0)
+I1223 14:09:29.357663 2009993984 solver.cpp:315]     Test net output #0: loss = 0.066798 (* 1 = 0.066798 loss)
+I1223 14:09:29.578430 2009993984 solver.cpp:209] Iteration 23184, loss = 0.0464951
+I1223 14:09:29.578464 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0464951 (* 1 = 0.0464951 loss)
+I1223 14:09:29.578472 2009993984 solver.cpp:445] Iteration 23184, lr = 1e-06
+I1223 14:11:01.436830 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_23598.caffemodel
+I1223 14:11:01.439430 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_23598.solverstate
+I1223 14:11:01.441303 2009993984 solver.cpp:264] Iteration 23598, Testing net (#0)
+I1223 14:11:16.034471 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0663768 (* 1 = 0.0663768 loss)
+I1223 14:11:16.255470 2009993984 solver.cpp:209] Iteration 23598, loss = 0.046044
+I1223 14:11:16.255503 2009993984 solver.cpp:224]     Train net output #0: loss = 0.046044 (* 1 = 0.046044 loss)
+I1223 14:11:16.255513 2009993984 solver.cpp:445] Iteration 23598, lr = 1e-06
+I1223 14:12:48.000113 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_24012.caffemodel
+I1223 14:12:48.002467 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_24012.solverstate
+I1223 14:12:48.004526 2009993984 solver.cpp:264] Iteration 24012, Testing net (#0)
+I1223 14:13:02.607015 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0659772 (* 1 = 0.0659772 loss)
+I1223 14:13:02.828744 2009993984 solver.cpp:209] Iteration 24012, loss = 0.0453488
+I1223 14:13:02.828776 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0453488 (* 1 = 0.0453488 loss)
+I1223 14:13:02.828788 2009993984 solver.cpp:445] Iteration 24012, lr = 1e-06
+I1223 14:14:34.659075 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_24426.caffemodel
+I1223 14:14:34.661321 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_24426.solverstate
+I1223 14:14:34.663333 2009993984 solver.cpp:264] Iteration 24426, Testing net (#0)
+I1223 14:14:49.228731 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0656206 (* 1 = 0.0656206 loss)
+I1223 14:14:49.448714 2009993984 solver.cpp:209] Iteration 24426, loss = 0.0453509
+I1223 14:14:49.448750 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0453509 (* 1 = 0.0453509 loss)
+I1223 14:14:49.448760 2009993984 solver.cpp:445] Iteration 24426, lr = 1e-06
+I1223 14:16:21.259770 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_24840.caffemodel
+I1223 14:16:21.261970 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_24840.solverstate
+I1223 14:16:21.263854 2009993984 solver.cpp:264] Iteration 24840, Testing net (#0)
+I1223 14:16:35.835049 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0652701 (* 1 = 0.0652701 loss)
+I1223 14:16:36.059995 2009993984 solver.cpp:209] Iteration 24840, loss = 0.0456533
+I1223 14:16:36.060027 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0456533 (* 1 = 0.0456533 loss)
+I1223 14:16:36.060036 2009993984 solver.cpp:445] Iteration 24840, lr = 1e-06
+I1223 14:18:07.820201 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_25254.caffemodel
+I1223 14:18:07.827376 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_25254.solverstate
+I1223 14:18:07.830289 2009993984 solver.cpp:264] Iteration 25254, Testing net (#0)
+I1223 14:18:22.417089 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0649099 (* 1 = 0.0649099 loss)
+I1223 14:18:22.637145 2009993984 solver.cpp:209] Iteration 25254, loss = 0.046883
+I1223 14:18:22.637181 2009993984 solver.cpp:224]     Train net output #0: loss = 0.046883 (* 1 = 0.046883 loss)
+I1223 14:18:22.637193 2009993984 solver.cpp:445] Iteration 25254, lr = 1e-06
+I1223 14:19:54.331606 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_25668.caffemodel
+I1223 14:19:54.333804 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_25668.solverstate
+I1223 14:19:54.335721 2009993984 solver.cpp:264] Iteration 25668, Testing net (#0)
+I1223 14:20:08.964972 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0645581 (* 1 = 0.0645581 loss)
+I1223 14:20:09.186509 2009993984 solver.cpp:209] Iteration 25668, loss = 0.0469039
+I1223 14:20:09.186543 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0469039 (* 1 = 0.0469039 loss)
+I1223 14:20:09.186550 2009993984 solver.cpp:445] Iteration 25668, lr = 1e-06
+I1223 14:21:41.018810 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_26082.caffemodel
+I1223 14:21:41.020978 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_26082.solverstate
+I1223 14:21:41.022835 2009993984 solver.cpp:264] Iteration 26082, Testing net (#0)
+I1223 14:21:55.621598 2009993984 solver.cpp:315]     Test net output #0: loss = 0.064219 (* 1 = 0.064219 loss)
+I1223 14:21:55.845178 2009993984 solver.cpp:209] Iteration 26082, loss = 0.0480064
+I1223 14:21:55.845214 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0480064 (* 1 = 0.0480064 loss)
+I1223 14:21:55.845222 2009993984 solver.cpp:445] Iteration 26082, lr = 1e-06
+I1223 14:23:27.605324 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_26496.caffemodel
+I1223 14:23:27.607533 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_26496.solverstate
+I1223 14:23:27.609424 2009993984 solver.cpp:264] Iteration 26496, Testing net (#0)
+I1223 14:23:42.223454 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0638703 (* 1 = 0.0638703 loss)
+I1223 14:23:42.444015 2009993984 solver.cpp:209] Iteration 26496, loss = 0.0479707
+I1223 14:23:42.444048 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0479707 (* 1 = 0.0479707 loss)
+I1223 14:23:42.444057 2009993984 solver.cpp:445] Iteration 26496, lr = 1e-06
+I1223 14:25:14.133157 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_26910.caffemodel
+I1223 14:25:14.135462 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_26910.solverstate
+I1223 14:25:14.137382 2009993984 solver.cpp:264] Iteration 26910, Testing net (#0)
+I1223 14:25:28.829298 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0635641 (* 1 = 0.0635641 loss)
+I1223 14:25:29.050226 2009993984 solver.cpp:209] Iteration 26910, loss = 0.0485798
+I1223 14:25:29.050261 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0485798 (* 1 = 0.0485798 loss)
+I1223 14:25:29.050268 2009993984 solver.cpp:445] Iteration 26910, lr = 1e-06
+I1223 14:27:00.960177 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_27324.caffemodel
+I1223 14:27:00.962921 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_27324.solverstate
+I1223 14:27:00.964746 2009993984 solver.cpp:264] Iteration 27324, Testing net (#0)
+I1223 14:27:15.569099 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0632439 (* 1 = 0.0632439 loss)
+I1223 14:27:15.790071 2009993984 solver.cpp:209] Iteration 27324, loss = 0.050222
+I1223 14:27:15.790104 2009993984 solver.cpp:224]     Train net output #0: loss = 0.050222 (* 1 = 0.050222 loss)
+I1223 14:27:15.790113 2009993984 solver.cpp:445] Iteration 27324, lr = 1e-06
+I1223 14:28:47.457502 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_27738.caffemodel
+I1223 14:28:47.459693 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_27738.solverstate
+I1223 14:28:47.461547 2009993984 solver.cpp:264] Iteration 27738, Testing net (#0)
+I1223 14:29:02.048324 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0629522 (* 1 = 0.0629522 loss)
+I1223 14:29:02.269405 2009993984 solver.cpp:209] Iteration 27738, loss = 0.0502697
+I1223 14:29:02.269438 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0502697 (* 1 = 0.0502697 loss)
+I1223 14:29:02.269444 2009993984 solver.cpp:445] Iteration 27738, lr = 1e-06
+I1223 14:30:33.897258 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_28152.caffemodel
+I1223 14:30:33.899946 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_28152.solverstate
+I1223 14:30:33.901837 2009993984 solver.cpp:264] Iteration 28152, Testing net (#0)
+I1223 14:30:48.582751 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0626849 (* 1 = 0.0626849 loss)
+I1223 14:30:48.804420 2009993984 solver.cpp:209] Iteration 28152, loss = 0.0512513
+I1223 14:30:48.804451 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0512513 (* 1 = 0.0512513 loss)
+I1223 14:30:48.804458 2009993984 solver.cpp:445] Iteration 28152, lr = 1e-06
+I1223 14:32:20.345217 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_28566.caffemodel
+I1223 14:32:20.347486 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_28566.solverstate
+I1223 14:32:20.349424 2009993984 solver.cpp:264] Iteration 28566, Testing net (#0)
+I1223 14:32:34.954028 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0623894 (* 1 = 0.0623894 loss)
+I1223 14:32:35.174450 2009993984 solver.cpp:209] Iteration 28566, loss = 0.0535954
+I1223 14:32:35.174485 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0535954 (* 1 = 0.0535954 loss)
+I1223 14:32:35.174494 2009993984 solver.cpp:445] Iteration 28566, lr = 1e-06
+I1223 14:34:06.837296 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_28980.caffemodel
+I1223 14:34:06.840068 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_28980.solverstate
+I1223 14:34:06.842028 2009993984 solver.cpp:264] Iteration 28980, Testing net (#0)
+I1223 14:34:21.438657 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0621078 (* 1 = 0.0621078 loss)
+I1223 14:34:21.659579 2009993984 solver.cpp:209] Iteration 28980, loss = 0.0545529
+I1223 14:34:21.659610 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0545529 (* 1 = 0.0545529 loss)
+I1223 14:34:21.659617 2009993984 solver.cpp:445] Iteration 28980, lr = 1e-06
+I1223 14:35:53.439404 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_29394.caffemodel
+I1223 14:35:53.441642 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_29394.solverstate
+I1223 14:35:53.443501 2009993984 solver.cpp:264] Iteration 29394, Testing net (#0)
+I1223 14:36:08.082921 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0618353 (* 1 = 0.0618353 loss)
+I1223 14:36:08.303535 2009993984 solver.cpp:209] Iteration 29394, loss = 0.0545281
+I1223 14:36:08.303568 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0545281 (* 1 = 0.0545281 loss)
+I1223 14:36:08.303577 2009993984 solver.cpp:445] Iteration 29394, lr = 1e-06
+I1223 14:37:40.327844 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_29808.caffemodel
+I1223 14:37:40.333598 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_29808.solverstate
+I1223 14:37:40.335553 2009993984 solver.cpp:264] Iteration 29808, Testing net (#0)
+I1223 14:37:54.907513 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0615782 (* 1 = 0.0615782 loss)
+I1223 14:37:55.128600 2009993984 solver.cpp:209] Iteration 29808, loss = 0.054062
+I1223 14:37:55.128629 2009993984 solver.cpp:224]     Train net output #0: loss = 0.054062 (* 1 = 0.054062 loss)
+I1223 14:37:55.128639 2009993984 solver.cpp:445] Iteration 29808, lr = 1e-06
+I1223 14:39:26.813979 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_30222.caffemodel
+I1223 14:39:26.819242 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_30222.solverstate
+I1223 14:39:26.821213 2009993984 solver.cpp:264] Iteration 30222, Testing net (#0)
+I1223 14:39:41.469985 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0613434 (* 1 = 0.0613434 loss)
+I1223 14:39:41.693594 2009993984 solver.cpp:209] Iteration 30222, loss = 0.0543266
+I1223 14:39:41.693631 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0543266 (* 1 = 0.0543266 loss)
+I1223 14:39:41.693641 2009993984 solver.cpp:445] Iteration 30222, lr = 1e-06
+I1223 14:41:14.651702 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_30636.caffemodel
+I1223 14:41:14.653926 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_30636.solverstate
+I1223 14:41:14.655832 2009993984 solver.cpp:264] Iteration 30636, Testing net (#0)
+I1223 14:41:29.403764 2009993984 solver.cpp:315]     Test net output #0: loss = 0.061124 (* 1 = 0.061124 loss)
+I1223 14:41:29.641216 2009993984 solver.cpp:209] Iteration 30636, loss = 0.0547599
+I1223 14:41:29.641247 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0547599 (* 1 = 0.0547599 loss)
+I1223 14:41:29.641254 2009993984 solver.cpp:445] Iteration 30636, lr = 1e-06
+I1223 14:43:02.328260 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_31050.caffemodel
+I1223 14:43:02.330945 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_31050.solverstate
+I1223 14:43:02.332937 2009993984 solver.cpp:264] Iteration 31050, Testing net (#0)
+I1223 14:43:16.932968 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0609131 (* 1 = 0.0609131 loss)
+I1223 14:43:17.160001 2009993984 solver.cpp:209] Iteration 31050, loss = 0.0547054
+I1223 14:43:17.160033 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0547054 (* 1 = 0.0547054 loss)
+I1223 14:43:17.160043 2009993984 solver.cpp:445] Iteration 31050, lr = 1e-06
+I1223 14:44:49.104828 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_31464.caffemodel
+I1223 14:44:49.107036 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_31464.solverstate
+I1223 14:44:49.108974 2009993984 solver.cpp:264] Iteration 31464, Testing net (#0)
+I1223 14:45:04.176221 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0606939 (* 1 = 0.0606939 loss)
+I1223 14:45:04.433672 2009993984 solver.cpp:209] Iteration 31464, loss = 0.0549528
+I1223 14:45:04.433711 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0549528 (* 1 = 0.0549528 loss)
+I1223 14:45:04.433722 2009993984 solver.cpp:445] Iteration 31464, lr = 1e-06
+I1223 14:46:37.017606 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_31878.caffemodel
+I1223 14:46:37.020371 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_31878.solverstate
+I1223 14:46:37.022318 2009993984 solver.cpp:264] Iteration 31878, Testing net (#0)
+I1223 14:46:51.744972 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0604623 (* 1 = 0.0604623 loss)
+I1223 14:46:51.971165 2009993984 solver.cpp:209] Iteration 31878, loss = 0.0555325
+I1223 14:46:51.971201 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0555325 (* 1 = 0.0555325 loss)
+I1223 14:46:51.971211 2009993984 solver.cpp:445] Iteration 31878, lr = 1e-06
+I1223 14:48:23.836468 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_32292.caffemodel
+I1223 14:48:23.838709 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_32292.solverstate
+I1223 14:48:23.840659 2009993984 solver.cpp:264] Iteration 32292, Testing net (#0)
+I1223 14:48:38.460894 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0602197 (* 1 = 0.0602197 loss)
+I1223 14:48:38.688698 2009993984 solver.cpp:209] Iteration 32292, loss = 0.054795
+I1223 14:48:38.688731 2009993984 solver.cpp:224]     Train net output #0: loss = 0.054795 (* 1 = 0.054795 loss)
+I1223 14:48:38.688740 2009993984 solver.cpp:445] Iteration 32292, lr = 1e-06
+I1223 14:50:10.628509 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_32706.caffemodel
+I1223 14:50:10.630781 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_32706.solverstate
+I1223 14:50:10.632673 2009993984 solver.cpp:264] Iteration 32706, Testing net (#0)
+I1223 14:50:25.284131 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0600072 (* 1 = 0.0600072 loss)
+I1223 14:50:25.513605 2009993984 solver.cpp:209] Iteration 32706, loss = 0.0545894
+I1223 14:50:25.513638 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0545894 (* 1 = 0.0545894 loss)
+I1223 14:50:25.513646 2009993984 solver.cpp:445] Iteration 32706, lr = 1e-06
+I1223 14:51:58.393973 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_33120.caffemodel
+I1223 14:51:58.399219 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_33120.solverstate
+I1223 14:51:58.401139 2009993984 solver.cpp:264] Iteration 33120, Testing net (#0)
+I1223 14:52:14.176312 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0597817 (* 1 = 0.0597817 loss)
+I1223 14:52:14.406771 2009993984 solver.cpp:209] Iteration 33120, loss = 0.0546522
+I1223 14:52:14.406805 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0546522 (* 1 = 0.0546522 loss)
+I1223 14:52:14.406816 2009993984 solver.cpp:445] Iteration 33120, lr = 1e-06
+I1223 14:54:06.432253 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_33534.caffemodel
+I1223 14:54:06.434432 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_33534.solverstate
+I1223 14:54:06.436274 2009993984 solver.cpp:264] Iteration 33534, Testing net (#0)
+I1223 14:54:23.317916 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0595788 (* 1 = 0.0595788 loss)
+I1223 14:54:23.547941 2009993984 solver.cpp:209] Iteration 33534, loss = 0.053865
+I1223 14:54:23.547978 2009993984 solver.cpp:224]     Train net output #0: loss = 0.053865 (* 1 = 0.053865 loss)
+I1223 14:54:23.547989 2009993984 solver.cpp:445] Iteration 33534, lr = 1e-06
+I1223 14:56:15.457170 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_33948.caffemodel
+I1223 14:56:15.459741 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_33948.solverstate
+I1223 14:56:15.461716 2009993984 solver.cpp:264] Iteration 33948, Testing net (#0)
+I1223 14:56:31.062115 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0593774 (* 1 = 0.0593774 loss)
+I1223 14:56:31.284988 2009993984 solver.cpp:209] Iteration 33948, loss = 0.0541034
+I1223 14:56:31.285022 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0541034 (* 1 = 0.0541034 loss)
+I1223 14:56:31.285032 2009993984 solver.cpp:445] Iteration 33948, lr = 1e-06
+I1223 14:58:05.930461 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_34362.caffemodel
+I1223 14:58:05.934833 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_34362.solverstate
+I1223 14:58:05.936794 2009993984 solver.cpp:264] Iteration 34362, Testing net (#0)
+I1223 14:58:21.224563 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0591643 (* 1 = 0.0591643 loss)
+I1223 14:58:21.452725 2009993984 solver.cpp:209] Iteration 34362, loss = 0.0549045
+I1223 14:58:21.452755 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0549045 (* 1 = 0.0549045 loss)
+I1223 14:58:21.452762 2009993984 solver.cpp:445] Iteration 34362, lr = 1e-06
+I1223 15:00:03.868429 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_34776.caffemodel
+I1223 15:00:03.870726 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_34776.solverstate
+I1223 15:00:03.872864 2009993984 solver.cpp:264] Iteration 34776, Testing net (#0)
+I1223 15:00:19.434254 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0589663 (* 1 = 0.0589663 loss)
+I1223 15:00:19.707788 2009993984 solver.cpp:209] Iteration 34776, loss = 0.056012
+I1223 15:00:19.707823 2009993984 solver.cpp:224]     Train net output #0: loss = 0.056012 (* 1 = 0.056012 loss)
+I1223 15:00:19.707830 2009993984 solver.cpp:445] Iteration 34776, lr = 1e-06
+I1223 15:02:02.597118 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_35190.caffemodel
+I1223 15:02:02.599320 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_35190.solverstate
+I1223 15:02:02.601264 2009993984 solver.cpp:264] Iteration 35190, Testing net (#0)
+I1223 15:02:18.664551 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0587557 (* 1 = 0.0587557 loss)
+I1223 15:02:18.926213 2009993984 solver.cpp:209] Iteration 35190, loss = 0.0564018
+I1223 15:02:18.926249 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0564018 (* 1 = 0.0564018 loss)
+I1223 15:02:18.926259 2009993984 solver.cpp:445] Iteration 35190, lr = 1e-06
+I1223 15:03:54.746376 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_35604.caffemodel
+I1223 15:03:54.748560 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_35604.solverstate
+I1223 15:03:54.750447 2009993984 solver.cpp:264] Iteration 35604, Testing net (#0)
+I1223 15:04:09.821310 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0585707 (* 1 = 0.0585707 loss)
+I1223 15:04:10.043272 2009993984 solver.cpp:209] Iteration 35604, loss = 0.0561148
+I1223 15:04:10.043305 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0561148 (* 1 = 0.0561148 loss)
+I1223 15:04:10.043318 2009993984 solver.cpp:445] Iteration 35604, lr = 1e-06
+I1223 15:05:47.527822 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_36018.caffemodel
+I1223 15:05:47.529996 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_36018.solverstate
+I1223 15:05:47.531975 2009993984 solver.cpp:264] Iteration 36018, Testing net (#0)
+I1223 15:06:02.825727 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0584126 (* 1 = 0.0584126 loss)
+I1223 15:06:03.054776 2009993984 solver.cpp:209] Iteration 36018, loss = 0.0561136
+I1223 15:06:03.054808 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0561136 (* 1 = 0.0561136 loss)
+I1223 15:06:03.054816 2009993984 solver.cpp:445] Iteration 36018, lr = 1e-06
+I1223 15:07:40.259896 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_36432.caffemodel
+I1223 15:07:40.262128 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_36432.solverstate
+I1223 15:07:40.264020 2009993984 solver.cpp:264] Iteration 36432, Testing net (#0)
+I1223 15:07:56.359127 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0582131 (* 1 = 0.0582131 loss)
+I1223 15:07:56.591068 2009993984 solver.cpp:209] Iteration 36432, loss = 0.0567142
+I1223 15:07:56.591100 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0567142 (* 1 = 0.0567142 loss)
+I1223 15:07:56.591109 2009993984 solver.cpp:445] Iteration 36432, lr = 1e-06
+I1223 15:09:33.043599 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_36846.caffemodel
+I1223 15:09:33.045903 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_36846.solverstate
+I1223 15:09:33.047883 2009993984 solver.cpp:264] Iteration 36846, Testing net (#0)
+I1223 15:09:51.327884 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0580254 (* 1 = 0.0580254 loss)
+I1223 15:09:51.664311 2009993984 solver.cpp:209] Iteration 36846, loss = 0.0579566
+I1223 15:09:51.664360 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0579566 (* 1 = 0.0579566 loss)
+I1223 15:09:51.664369 2009993984 solver.cpp:445] Iteration 36846, lr = 1e-06
+I1223 15:11:24.164928 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_37260.caffemodel
+I1223 15:11:24.167129 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_37260.solverstate
+I1223 15:11:24.169212 2009993984 solver.cpp:264] Iteration 37260, Testing net (#0)
+I1223 15:11:38.810574 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0578528 (* 1 = 0.0578528 loss)
+I1223 15:11:39.038938 2009993984 solver.cpp:209] Iteration 37260, loss = 0.0584367
+I1223 15:11:39.038971 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0584367 (* 1 = 0.0584367 loss)
+I1223 15:11:39.038979 2009993984 solver.cpp:445] Iteration 37260, lr = 1e-06
+I1223 15:13:11.059227 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_37674.caffemodel
+I1223 15:13:11.061620 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_37674.solverstate
+I1223 15:13:11.063549 2009993984 solver.cpp:264] Iteration 37674, Testing net (#0)
+I1223 15:13:25.665597 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0577083 (* 1 = 0.0577083 loss)
+I1223 15:13:25.886971 2009993984 solver.cpp:209] Iteration 37674, loss = 0.0593943
+I1223 15:13:25.887003 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0593943 (* 1 = 0.0593943 loss)
+I1223 15:13:25.887011 2009993984 solver.cpp:445] Iteration 37674, lr = 1e-06
+I1223 15:14:59.777067 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_38088.caffemodel
+I1223 15:14:59.780292 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_38088.solverstate
+I1223 15:14:59.782544 2009993984 solver.cpp:264] Iteration 38088, Testing net (#0)
+I1223 15:15:15.306885 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0575431 (* 1 = 0.0575431 loss)
+I1223 15:15:15.531766 2009993984 solver.cpp:209] Iteration 38088, loss = 0.0593726
+I1223 15:15:15.531800 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0593726 (* 1 = 0.0593726 loss)
+I1223 15:15:15.531808 2009993984 solver.cpp:445] Iteration 38088, lr = 1e-06
+I1223 15:16:48.989063 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_38502.caffemodel
+I1223 15:16:48.991361 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_38502.solverstate
+I1223 15:16:48.993208 2009993984 solver.cpp:264] Iteration 38502, Testing net (#0)
+I1223 15:17:03.650318 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0574139 (* 1 = 0.0574139 loss)
+I1223 15:17:03.876909 2009993984 solver.cpp:209] Iteration 38502, loss = 0.0593229
+I1223 15:17:03.876942 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0593229 (* 1 = 0.0593229 loss)
+I1223 15:17:03.876953 2009993984 solver.cpp:445] Iteration 38502, lr = 1e-06
+I1223 15:18:37.538975 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_38916.caffemodel
+I1223 15:18:37.541332 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_38916.solverstate
+I1223 15:18:37.543406 2009993984 solver.cpp:264] Iteration 38916, Testing net (#0)
+I1223 15:18:52.232944 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0572555 (* 1 = 0.0572555 loss)
+I1223 15:18:52.458348 2009993984 solver.cpp:209] Iteration 38916, loss = 0.0597257
+I1223 15:18:52.458379 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0597257 (* 1 = 0.0597257 loss)
+I1223 15:18:52.458389 2009993984 solver.cpp:445] Iteration 38916, lr = 1e-06
+I1223 15:20:39.425990 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_39330.caffemodel
+I1223 15:20:39.428347 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_39330.solverstate
+I1223 15:20:39.430258 2009993984 solver.cpp:264] Iteration 39330, Testing net (#0)
+I1223 15:20:54.325721 2009993984 solver.cpp:315]     Test net output #0: loss = 0.057093 (* 1 = 0.057093 loss)
+I1223 15:20:54.556174 2009993984 solver.cpp:209] Iteration 39330, loss = 0.0604407
+I1223 15:20:54.556210 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0604407 (* 1 = 0.0604407 loss)
+I1223 15:20:54.556218 2009993984 solver.cpp:445] Iteration 39330, lr = 1e-06
+I1223 15:22:33.151551 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_39744.caffemodel
+I1223 15:22:33.157527 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_39744.solverstate
+I1223 15:22:33.160715 2009993984 solver.cpp:264] Iteration 39744, Testing net (#0)
+I1223 15:22:56.794286 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0569522 (* 1 = 0.0569522 loss)
+I1223 15:22:57.171507 2009993984 solver.cpp:209] Iteration 39744, loss = 0.0601229
+I1223 15:22:57.171551 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0601229 (* 1 = 0.0601229 loss)
+I1223 15:22:57.171563 2009993984 solver.cpp:445] Iteration 39744, lr = 1e-06
+I1223 15:25:32.441665 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_40158.caffemodel
+I1223 15:25:32.444934 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_40158.solverstate
+I1223 15:25:32.447878 2009993984 solver.cpp:264] Iteration 40158, Testing net (#0)
+I1223 15:25:56.329839 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0568062 (* 1 = 0.0568062 loss)
+I1223 15:25:56.711891 2009993984 solver.cpp:209] Iteration 40158, loss = 0.0592862
+I1223 15:25:56.711931 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0592862 (* 1 = 0.0592862 loss)
+I1223 15:25:56.711942 2009993984 solver.cpp:445] Iteration 40158, lr = 1e-06
+I1223 15:28:31.793467 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_40572.caffemodel
+I1223 15:28:31.801424 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_40572.solverstate
+I1223 15:28:31.804411 2009993984 solver.cpp:264] Iteration 40572, Testing net (#0)
+I1223 15:28:55.678058 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0566607 (* 1 = 0.0566607 loss)
+I1223 15:28:56.048290 2009993984 solver.cpp:209] Iteration 40572, loss = 0.0589741
+I1223 15:28:56.048329 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0589741 (* 1 = 0.0589741 loss)
+I1223 15:28:56.048339 2009993984 solver.cpp:445] Iteration 40572, lr = 1e-06
+I1223 15:31:31.617279 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_40986.caffemodel
+I1223 15:31:31.620650 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_40986.solverstate
+I1223 15:31:31.623610 2009993984 solver.cpp:264] Iteration 40986, Testing net (#0)
+I1223 15:31:55.370697 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0565161 (* 1 = 0.0565161 loss)
+I1223 15:31:55.737160 2009993984 solver.cpp:209] Iteration 40986, loss = 0.0586705
+I1223 15:31:55.737198 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0586705 (* 1 = 0.0586705 loss)
+I1223 15:31:55.737210 2009993984 solver.cpp:445] Iteration 40986, lr = 1e-06
+I1223 15:34:11.799538 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_41400.caffemodel
+I1223 15:34:11.803732 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_41400.solverstate
+I1223 15:34:11.805670 2009993984 solver.cpp:264] Iteration 41400, Testing net (#0)
+I1223 15:34:26.501579 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0563697 (* 1 = 0.0563697 loss)
+I1223 15:34:26.728729 2009993984 solver.cpp:209] Iteration 41400, loss = 0.0585717
+I1223 15:34:26.728762 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0585717 (* 1 = 0.0585717 loss)
+I1223 15:34:26.728771 2009993984 solver.cpp:445] Iteration 41400, lr = 1e-06
+I1223 15:36:09.401674 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_41814.caffemodel
+I1223 15:36:09.406231 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_41814.solverstate
+I1223 15:36:09.408139 2009993984 solver.cpp:264] Iteration 41814, Testing net (#0)
+I1223 15:36:24.566251 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0562489 (* 1 = 0.0562489 loss)
+I1223 15:36:24.791934 2009993984 solver.cpp:209] Iteration 41814, loss = 0.057867
+I1223 15:36:24.791964 2009993984 solver.cpp:224]     Train net output #0: loss = 0.057867 (* 1 = 0.057867 loss)
+I1223 15:36:24.791972 2009993984 solver.cpp:445] Iteration 41814, lr = 1e-06
+I1223 15:38:03.558938 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_42228.caffemodel
+I1223 15:38:03.562368 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_42228.solverstate
+I1223 15:38:03.565260 2009993984 solver.cpp:264] Iteration 42228, Testing net (#0)
+I1223 15:38:19.279808 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0561273 (* 1 = 0.0561273 loss)
+I1223 15:38:19.501744 2009993984 solver.cpp:209] Iteration 42228, loss = 0.058047
+I1223 15:38:19.501775 2009993984 solver.cpp:224]     Train net output #0: loss = 0.058047 (* 1 = 0.058047 loss)
+I1223 15:38:19.501783 2009993984 solver.cpp:445] Iteration 42228, lr = 1e-06
+I1223 15:39:58.597586 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_42642.caffemodel
+I1223 15:39:58.599772 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_42642.solverstate
+I1223 15:39:58.601649 2009993984 solver.cpp:264] Iteration 42642, Testing net (#0)
+I1223 15:40:13.932358 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0559762 (* 1 = 0.0559762 loss)
+I1223 15:40:14.185073 2009993984 solver.cpp:209] Iteration 42642, loss = 0.0605192
+I1223 15:40:14.185108 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0605192 (* 1 = 0.0605192 loss)
+I1223 15:40:14.185118 2009993984 solver.cpp:445] Iteration 42642, lr = 1e-06
+I1223 15:41:50.139672 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_43056.caffemodel
+I1223 15:41:50.144099 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_43056.solverstate
+I1223 15:41:50.146046 2009993984 solver.cpp:264] Iteration 43056, Testing net (#0)
+I1223 15:42:04.846294 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0558185 (* 1 = 0.0558185 loss)
+I1223 15:42:05.070039 2009993984 solver.cpp:209] Iteration 43056, loss = 0.0608468
+I1223 15:42:05.070075 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0608468 (* 1 = 0.0608468 loss)
+I1223 15:42:05.070085 2009993984 solver.cpp:445] Iteration 43056, lr = 1e-06
+I1223 15:43:38.043130 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_43470.caffemodel
+I1223 15:43:38.047651 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_43470.solverstate
+I1223 15:43:38.050063 2009993984 solver.cpp:264] Iteration 43470, Testing net (#0)
+I1223 15:43:52.761010 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0557016 (* 1 = 0.0557016 loss)
+I1223 15:43:52.993609 2009993984 solver.cpp:209] Iteration 43470, loss = 0.0600183
+I1223 15:43:52.993643 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0600183 (* 1 = 0.0600183 loss)
+I1223 15:43:52.993655 2009993984 solver.cpp:445] Iteration 43470, lr = 1e-06
+I1223 15:45:25.773227 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_43884.caffemodel
+I1223 15:45:25.778290 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_43884.solverstate
+I1223 15:45:25.780200 2009993984 solver.cpp:264] Iteration 43884, Testing net (#0)
+I1223 15:45:41.082448 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0555928 (* 1 = 0.0555928 loss)
+I1223 15:45:41.310145 2009993984 solver.cpp:209] Iteration 43884, loss = 0.060054
+I1223 15:45:41.310178 2009993984 solver.cpp:224]     Train net output #0: loss = 0.060054 (* 1 = 0.060054 loss)
+I1223 15:45:41.310187 2009993984 solver.cpp:445] Iteration 43884, lr = 1e-06
+I1223 15:47:17.113260 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_44298.caffemodel
+I1223 15:47:17.115486 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_44298.solverstate
+I1223 15:47:17.117463 2009993984 solver.cpp:264] Iteration 44298, Testing net (#0)
+I1223 15:47:33.674692 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0554685 (* 1 = 0.0554685 loss)
+I1223 15:47:34.015200 2009993984 solver.cpp:209] Iteration 44298, loss = 0.0607029
+I1223 15:47:34.015234 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0607029 (* 1 = 0.0607029 loss)
+I1223 15:47:34.015244 2009993984 solver.cpp:445] Iteration 44298, lr = 1e-06
+I1223 15:49:08.472362 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_44712.caffemodel
+I1223 15:49:08.474788 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_44712.solverstate
+I1223 15:49:08.477166 2009993984 solver.cpp:264] Iteration 44712, Testing net (#0)
+I1223 15:49:23.698920 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0553437 (* 1 = 0.0553437 loss)
+I1223 15:49:23.925525 2009993984 solver.cpp:209] Iteration 44712, loss = 0.0610597
+I1223 15:49:23.925559 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0610597 (* 1 = 0.0610597 loss)
+I1223 15:49:23.925567 2009993984 solver.cpp:445] Iteration 44712, lr = 1e-06
+I1223 15:50:59.590865 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_45126.caffemodel
+I1223 15:50:59.593494 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_45126.solverstate
+I1223 15:50:59.595376 2009993984 solver.cpp:264] Iteration 45126, Testing net (#0)
+I1223 15:51:15.692399 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0552332 (* 1 = 0.0552332 loss)
+I1223 15:51:15.960752 2009993984 solver.cpp:209] Iteration 45126, loss = 0.0628915
+I1223 15:51:15.960785 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0628915 (* 1 = 0.0628915 loss)
+I1223 15:51:15.960794 2009993984 solver.cpp:445] Iteration 45126, lr = 1e-06
+I1223 15:52:53.454787 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_45540.caffemodel
+I1223 15:52:53.459847 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_45540.solverstate
+I1223 15:52:53.461936 2009993984 solver.cpp:264] Iteration 45540, Testing net (#0)
+I1223 15:53:08.410562 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0551187 (* 1 = 0.0551187 loss)
+I1223 15:53:08.632159 2009993984 solver.cpp:209] Iteration 45540, loss = 0.0619008
+I1223 15:53:08.632194 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0619008 (* 1 = 0.0619008 loss)
+I1223 15:53:08.632202 2009993984 solver.cpp:445] Iteration 45540, lr = 1e-06
+I1223 15:54:46.714648 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_45954.caffemodel
+I1223 15:54:46.717252 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_45954.solverstate
+I1223 15:54:46.719394 2009993984 solver.cpp:264] Iteration 45954, Testing net (#0)
+I1223 15:55:02.236472 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0549795 (* 1 = 0.0549795 loss)
+I1223 15:55:02.459892 2009993984 solver.cpp:209] Iteration 45954, loss = 0.0620207
+I1223 15:55:02.459939 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0620207 (* 1 = 0.0620207 loss)
+I1223 15:55:02.459949 2009993984 solver.cpp:445] Iteration 45954, lr = 1e-06
+I1223 15:56:37.385152 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_46368.caffemodel
+I1223 15:56:37.388195 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_46368.solverstate
+I1223 15:56:37.390204 2009993984 solver.cpp:264] Iteration 46368, Testing net (#0)
+I1223 15:56:52.535111 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0548549 (* 1 = 0.0548549 loss)
+I1223 15:56:52.780661 2009993984 solver.cpp:209] Iteration 46368, loss = 0.0620068
+I1223 15:56:52.780697 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0620068 (* 1 = 0.0620068 loss)
+I1223 15:56:52.780704 2009993984 solver.cpp:445] Iteration 46368, lr = 1e-06
+I1223 15:58:30.905777 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_46782.caffemodel
+I1223 15:58:30.909819 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_46782.solverstate
+I1223 15:58:30.911870 2009993984 solver.cpp:264] Iteration 46782, Testing net (#0)
+I1223 15:58:46.023811 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0547408 (* 1 = 0.0547408 loss)
+I1223 15:58:46.247450 2009993984 solver.cpp:209] Iteration 46782, loss = 0.0616189
+I1223 15:58:46.247484 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0616189 (* 1 = 0.0616189 loss)
+I1223 15:58:46.247496 2009993984 solver.cpp:445] Iteration 46782, lr = 1e-06
+I1223 16:00:22.400590 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_47196.caffemodel
+I1223 16:00:22.405292 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_47196.solverstate
+I1223 16:00:22.407341 2009993984 solver.cpp:264] Iteration 47196, Testing net (#0)
+I1223 16:00:37.527832 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0546297 (* 1 = 0.0546297 loss)
+I1223 16:00:37.772315 2009993984 solver.cpp:209] Iteration 47196, loss = 0.0611299
+I1223 16:00:37.772344 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0611299 (* 1 = 0.0611299 loss)
+I1223 16:00:37.772351 2009993984 solver.cpp:445] Iteration 47196, lr = 1e-06
+I1223 16:02:12.771513 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_47610.caffemodel
+I1223 16:02:12.776125 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_47610.solverstate
+I1223 16:02:12.778059 2009993984 solver.cpp:264] Iteration 47610, Testing net (#0)
+I1223 16:02:27.717273 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0545236 (* 1 = 0.0545236 loss)
+I1223 16:02:27.949731 2009993984 solver.cpp:209] Iteration 47610, loss = 0.0622907
+I1223 16:02:27.949764 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0622907 (* 1 = 0.0622907 loss)
+I1223 16:02:27.949774 2009993984 solver.cpp:445] Iteration 47610, lr = 1e-06
+I1223 16:04:06.023885 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_48024.caffemodel
+I1223 16:04:06.028290 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_48024.solverstate
+I1223 16:04:06.031432 2009993984 solver.cpp:264] Iteration 48024, Testing net (#0)
+I1223 16:04:21.071631 2009993984 solver.cpp:315]     Test net output #0: loss = 0.054411 (* 1 = 0.054411 loss)
+I1223 16:04:21.292175 2009993984 solver.cpp:209] Iteration 48024, loss = 0.0602344
+I1223 16:04:21.292209 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0602344 (* 1 = 0.0602344 loss)
+I1223 16:04:21.292217 2009993984 solver.cpp:445] Iteration 48024, lr = 1e-06
+I1223 16:05:59.773032 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_48438.caffemodel
+I1223 16:05:59.777851 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_48438.solverstate
+I1223 16:05:59.780612 2009993984 solver.cpp:264] Iteration 48438, Testing net (#0)
+I1223 16:06:16.378809 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0543135 (* 1 = 0.0543135 loss)
+I1223 16:06:16.600386 2009993984 solver.cpp:209] Iteration 48438, loss = 0.0601541
+I1223 16:06:16.600424 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0601541 (* 1 = 0.0601541 loss)
+I1223 16:06:16.600432 2009993984 solver.cpp:445] Iteration 48438, lr = 1e-06
+I1223 16:07:48.598726 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_48852.caffemodel
+I1223 16:07:48.603924 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_48852.solverstate
+I1223 16:07:48.605856 2009993984 solver.cpp:264] Iteration 48852, Testing net (#0)
+I1223 16:08:04.088377 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0542318 (* 1 = 0.0542318 loss)
+I1223 16:08:04.327080 2009993984 solver.cpp:209] Iteration 48852, loss = 0.05837
+I1223 16:08:04.327113 2009993984 solver.cpp:224]     Train net output #0: loss = 0.05837 (* 1 = 0.05837 loss)
+I1223 16:08:04.327123 2009993984 solver.cpp:445] Iteration 48852, lr = 1e-06
+I1223 16:09:41.998126 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_49266.caffemodel
+I1223 16:09:42.000802 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_49266.solverstate
+I1223 16:09:42.002670 2009993984 solver.cpp:264] Iteration 49266, Testing net (#0)
+I1223 16:09:56.848436 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0541135 (* 1 = 0.0541135 loss)
+I1223 16:09:57.158977 2009993984 solver.cpp:209] Iteration 49266, loss = 0.0557839
+I1223 16:09:57.159039 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0557839 (* 1 = 0.0557839 loss)
+I1223 16:09:57.159052 2009993984 solver.cpp:445] Iteration 49266, lr = 1e-06
+I1223 16:11:32.485504 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_49680.caffemodel
+I1223 16:11:32.488241 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_49680.solverstate
+I1223 16:11:32.490191 2009993984 solver.cpp:264] Iteration 49680, Testing net (#0)
+I1223 16:11:47.219343 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0540319 (* 1 = 0.0540319 loss)
+I1223 16:11:47.440681 2009993984 solver.cpp:209] Iteration 49680, loss = 0.0540665
+I1223 16:11:47.440717 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0540665 (* 1 = 0.0540665 loss)
+I1223 16:11:47.440726 2009993984 solver.cpp:445] Iteration 49680, lr = 1e-06
+I1223 16:13:21.287662 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_50094.caffemodel
+I1223 16:13:21.295316 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_50094.solverstate
+I1223 16:13:21.297507 2009993984 solver.cpp:264] Iteration 50094, Testing net (#0)
+I1223 16:13:37.001483 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0539227 (* 1 = 0.0539227 loss)
+I1223 16:13:37.296622 2009993984 solver.cpp:209] Iteration 50094, loss = 0.0538602
+I1223 16:13:37.296669 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0538602 (* 1 = 0.0538602 loss)
+I1223 16:13:37.296679 2009993984 solver.cpp:445] Iteration 50094, lr = 1e-06
+I1223 16:15:12.232103 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_50508.caffemodel
+I1223 16:15:12.237488 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_50508.solverstate
+I1223 16:15:12.239462 2009993984 solver.cpp:264] Iteration 50508, Testing net (#0)
+I1223 16:15:28.000284 2009993984 solver.cpp:315]     Test net output #0: loss = 0.053833 (* 1 = 0.053833 loss)
+I1223 16:15:28.223392 2009993984 solver.cpp:209] Iteration 50508, loss = 0.0540085
+I1223 16:15:28.223426 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0540085 (* 1 = 0.0540085 loss)
+I1223 16:15:28.223434 2009993984 solver.cpp:445] Iteration 50508, lr = 1e-06
+I1223 16:17:03.318352 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_50922.caffemodel
+I1223 16:17:03.320528 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_50922.solverstate
+I1223 16:17:03.322432 2009993984 solver.cpp:264] Iteration 50922, Testing net (#0)
+I1223 16:17:19.297102 2009993984 solver.cpp:315]     Test net output #0: loss = 0.053764 (* 1 = 0.053764 loss)
+I1223 16:17:19.527575 2009993984 solver.cpp:209] Iteration 50922, loss = 0.0541799
+I1223 16:17:19.527628 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0541799 (* 1 = 0.0541799 loss)
+I1223 16:17:19.527639 2009993984 solver.cpp:445] Iteration 50922, lr = 1e-06
+I1223 16:19:00.908154 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_51336.caffemodel
+I1223 16:19:00.911038 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_51336.solverstate
+I1223 16:19:00.913058 2009993984 solver.cpp:264] Iteration 51336, Testing net (#0)
+I1223 16:19:17.259785 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0536899 (* 1 = 0.0536899 loss)
+I1223 16:19:17.482935 2009993984 solver.cpp:209] Iteration 51336, loss = 0.0541602
+I1223 16:19:17.482975 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0541602 (* 1 = 0.0541602 loss)
+I1223 16:19:17.482987 2009993984 solver.cpp:445] Iteration 51336, lr = 1e-06
+I1223 16:20:58.083827 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_51750.caffemodel
+I1223 16:20:58.086115 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_51750.solverstate
+I1223 16:20:58.088354 2009993984 solver.cpp:264] Iteration 51750, Testing net (#0)
+I1223 16:21:14.217416 2009993984 solver.cpp:315]     Test net output #0: loss = 0.053603 (* 1 = 0.053603 loss)
+I1223 16:21:14.451488 2009993984 solver.cpp:209] Iteration 51750, loss = 0.0540649
+I1223 16:21:14.451520 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0540649 (* 1 = 0.0540649 loss)
+I1223 16:21:14.451527 2009993984 solver.cpp:445] Iteration 51750, lr = 1e-06
+I1223 16:22:52.430076 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_52164.caffemodel
+I1223 16:22:52.434766 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_52164.solverstate
+I1223 16:22:52.436647 2009993984 solver.cpp:264] Iteration 52164, Testing net (#0)
+I1223 16:23:07.108767 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0535129 (* 1 = 0.0535129 loss)
+I1223 16:23:07.329488 2009993984 solver.cpp:209] Iteration 52164, loss = 0.0537862
+I1223 16:23:07.329519 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0537862 (* 1 = 0.0537862 loss)
+I1223 16:23:07.329525 2009993984 solver.cpp:445] Iteration 52164, lr = 1e-06
+I1223 16:24:54.597295 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_52578.caffemodel
+I1223 16:24:54.599493 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_52578.solverstate
+I1223 16:24:54.601366 2009993984 solver.cpp:264] Iteration 52578, Testing net (#0)
+I1223 16:25:09.550756 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0534223 (* 1 = 0.0534223 loss)
+I1223 16:25:09.775100 2009993984 solver.cpp:209] Iteration 52578, loss = 0.0537344
+I1223 16:25:09.775132 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0537344 (* 1 = 0.0537344 loss)
+I1223 16:25:09.775141 2009993984 solver.cpp:445] Iteration 52578, lr = 1e-06
+I1223 16:26:44.843655 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_52992.caffemodel
+I1223 16:26:44.847806 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_52992.solverstate
+I1223 16:26:44.850812 2009993984 solver.cpp:264] Iteration 52992, Testing net (#0)
+I1223 16:27:00.710583 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0533112 (* 1 = 0.0533112 loss)
+I1223 16:27:00.934380 2009993984 solver.cpp:209] Iteration 52992, loss = 0.0559743
+I1223 16:27:00.934413 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0559743 (* 1 = 0.0559743 loss)
+I1223 16:27:00.934422 2009993984 solver.cpp:445] Iteration 52992, lr = 1e-06
+I1223 16:28:40.464867 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_53406.caffemodel
+I1223 16:28:40.469528 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_53406.solverstate
+I1223 16:28:40.471452 2009993984 solver.cpp:264] Iteration 53406, Testing net (#0)
+I1223 16:28:55.712231 2009993984 solver.cpp:315]     Test net output #0: loss = 0.053235 (* 1 = 0.053235 loss)
+I1223 16:28:55.937690 2009993984 solver.cpp:209] Iteration 53406, loss = 0.0558776
+I1223 16:28:55.937721 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0558776 (* 1 = 0.0558776 loss)
+I1223 16:28:55.937731 2009993984 solver.cpp:445] Iteration 53406, lr = 1e-06
+I1223 16:30:33.249557 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_53820.caffemodel
+I1223 16:30:33.251842 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_53820.solverstate
+I1223 16:30:33.254024 2009993984 solver.cpp:264] Iteration 53820, Testing net (#0)
+I1223 16:30:48.303249 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0531549 (* 1 = 0.0531549 loss)
+I1223 16:30:48.526132 2009993984 solver.cpp:209] Iteration 53820, loss = 0.0567956
+I1223 16:30:48.526164 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0567956 (* 1 = 0.0567956 loss)
+I1223 16:30:48.526172 2009993984 solver.cpp:445] Iteration 53820, lr = 1e-06
+I1223 16:32:26.115808 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_54234.caffemodel
+I1223 16:32:26.118137 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_54234.solverstate
+I1223 16:32:26.119976 2009993984 solver.cpp:264] Iteration 54234, Testing net (#0)
+I1223 16:32:43.211935 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0530646 (* 1 = 0.0530646 loss)
+I1223 16:32:43.446660 2009993984 solver.cpp:209] Iteration 54234, loss = 0.0570323
+I1223 16:32:43.446689 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0570323 (* 1 = 0.0570323 loss)
+I1223 16:32:43.446699 2009993984 solver.cpp:445] Iteration 54234, lr = 1e-06
+I1223 16:34:27.429551 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_54648.caffemodel
+I1223 16:34:27.431776 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_54648.solverstate
+I1223 16:34:27.434069 2009993984 solver.cpp:264] Iteration 54648, Testing net (#0)
+I1223 16:34:42.888205 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0529606 (* 1 = 0.0529606 loss)
+I1223 16:34:43.132319 2009993984 solver.cpp:209] Iteration 54648, loss = 0.056923
+I1223 16:34:43.132350 2009993984 solver.cpp:224]     Train net output #0: loss = 0.056923 (* 1 = 0.056923 loss)
+I1223 16:34:43.132357 2009993984 solver.cpp:445] Iteration 54648, lr = 1e-06
+I1223 16:36:22.561072 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_55062.caffemodel
+I1223 16:36:22.563977 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_55062.solverstate
+I1223 16:36:22.566691 2009993984 solver.cpp:264] Iteration 55062, Testing net (#0)
+I1223 16:36:38.546968 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0528694 (* 1 = 0.0528694 loss)
+I1223 16:36:38.811923 2009993984 solver.cpp:209] Iteration 55062, loss = 0.0585186
+I1223 16:36:38.811956 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0585186 (* 1 = 0.0585186 loss)
+I1223 16:36:38.811967 2009993984 solver.cpp:445] Iteration 55062, lr = 1e-06
+I1223 16:38:21.480401 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_55476.caffemodel
+I1223 16:38:21.484814 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_55476.solverstate
+I1223 16:38:21.486824 2009993984 solver.cpp:264] Iteration 55476, Testing net (#0)
+I1223 16:38:37.028090 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0527943 (* 1 = 0.0527943 loss)
+I1223 16:38:37.249158 2009993984 solver.cpp:209] Iteration 55476, loss = 0.0607554
+I1223 16:38:37.249197 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0607554 (* 1 = 0.0607554 loss)
+I1223 16:38:37.249207 2009993984 solver.cpp:445] Iteration 55476, lr = 1e-06
+I1223 16:40:15.656745 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_55890.caffemodel
+I1223 16:40:15.662786 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_55890.solverstate
+I1223 16:40:15.665640 2009993984 solver.cpp:264] Iteration 55890, Testing net (#0)
+I1223 16:40:30.291033 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0526974 (* 1 = 0.0526974 loss)
+I1223 16:40:30.513263 2009993984 solver.cpp:209] Iteration 55890, loss = 0.0612829
+I1223 16:40:30.513298 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0612829 (* 1 = 0.0612829 loss)
+I1223 16:40:30.513305 2009993984 solver.cpp:445] Iteration 55890, lr = 1e-06
+I1223 16:42:06.587532 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_56304.caffemodel
+I1223 16:42:06.590080 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_56304.solverstate
+I1223 16:42:06.592108 2009993984 solver.cpp:264] Iteration 56304, Testing net (#0)
+I1223 16:42:21.994261 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0526064 (* 1 = 0.0526064 loss)
+I1223 16:42:22.215437 2009993984 solver.cpp:209] Iteration 56304, loss = 0.0614661
+I1223 16:42:22.215471 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0614661 (* 1 = 0.0614661 loss)
+I1223 16:42:22.215482 2009993984 solver.cpp:445] Iteration 56304, lr = 1e-06
+I1223 16:43:57.109786 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_56718.caffemodel
+I1223 16:43:57.114522 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_56718.solverstate
+I1223 16:43:57.116927 2009993984 solver.cpp:264] Iteration 56718, Testing net (#0)
+I1223 16:44:12.396553 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0525484 (* 1 = 0.0525484 loss)
+I1223 16:44:12.622818 2009993984 solver.cpp:209] Iteration 56718, loss = 0.0619717
+I1223 16:44:12.622853 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0619717 (* 1 = 0.0619717 loss)
+I1223 16:44:12.622866 2009993984 solver.cpp:445] Iteration 56718, lr = 1e-06
+I1223 16:45:51.730690 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_57132.caffemodel
+I1223 16:45:51.732923 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_57132.solverstate
+I1223 16:45:51.734876 2009993984 solver.cpp:264] Iteration 57132, Testing net (#0)
+I1223 16:46:07.800966 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0524589 (* 1 = 0.0524589 loss)
+I1223 16:46:08.062207 2009993984 solver.cpp:209] Iteration 57132, loss = 0.0608857
+I1223 16:46:08.062276 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0608857 (* 1 = 0.0608857 loss)
+I1223 16:46:08.062293 2009993984 solver.cpp:445] Iteration 57132, lr = 1e-06
+I1223 16:47:43.436745 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_57546.caffemodel
+I1223 16:47:43.438971 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_57546.solverstate
+I1223 16:47:43.440896 2009993984 solver.cpp:264] Iteration 57546, Testing net (#0)
+I1223 16:47:59.460952 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0523791 (* 1 = 0.0523791 loss)
+I1223 16:47:59.723130 2009993984 solver.cpp:209] Iteration 57546, loss = 0.059499
+I1223 16:47:59.723162 2009993984 solver.cpp:224]     Train net output #0: loss = 0.059499 (* 1 = 0.059499 loss)
+I1223 16:47:59.723172 2009993984 solver.cpp:445] Iteration 57546, lr = 1e-06
+I1223 16:49:34.016821 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_57960.caffemodel
+I1223 16:49:34.021898 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_57960.solverstate
+I1223 16:49:34.023813 2009993984 solver.cpp:264] Iteration 57960, Testing net (#0)
+I1223 16:49:48.884003 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0522826 (* 1 = 0.0522826 loss)
+I1223 16:49:49.108114 2009993984 solver.cpp:209] Iteration 57960, loss = 0.0594914
+I1223 16:49:49.108147 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0594914 (* 1 = 0.0594914 loss)
+I1223 16:49:49.108157 2009993984 solver.cpp:445] Iteration 57960, lr = 1e-06
+I1223 16:51:24.340172 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_58374.caffemodel
+I1223 16:51:24.342416 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_58374.solverstate
+I1223 16:51:24.344526 2009993984 solver.cpp:264] Iteration 58374, Testing net (#0)
+I1223 16:51:39.254256 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0522362 (* 1 = 0.0522362 loss)
+I1223 16:51:39.479074 2009993984 solver.cpp:209] Iteration 58374, loss = 0.0572836
+I1223 16:51:39.479105 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0572836 (* 1 = 0.0572836 loss)
+I1223 16:51:39.479113 2009993984 solver.cpp:445] Iteration 58374, lr = 1e-06
+I1223 16:53:13.599521 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_58788.caffemodel
+I1223 16:53:13.602336 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_58788.solverstate
+I1223 16:53:13.604306 2009993984 solver.cpp:264] Iteration 58788, Testing net (#0)
+I1223 16:53:28.239909 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0521664 (* 1 = 0.0521664 loss)
+I1223 16:53:28.461076 2009993984 solver.cpp:209] Iteration 58788, loss = 0.0576517
+I1223 16:53:28.461107 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0576517 (* 1 = 0.0576517 loss)
+I1223 16:53:28.461115 2009993984 solver.cpp:445] Iteration 58788, lr = 1e-06
+I1223 16:55:01.568728 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_59202.caffemodel
+I1223 16:55:01.572970 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_59202.solverstate
+I1223 16:55:01.575464 2009993984 solver.cpp:264] Iteration 59202, Testing net (#0)
+I1223 16:55:16.591316 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0521087 (* 1 = 0.0521087 loss)
+I1223 16:55:16.814398 2009993984 solver.cpp:209] Iteration 59202, loss = 0.0575807
+I1223 16:55:16.814429 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0575807 (* 1 = 0.0575807 loss)
+I1223 16:55:16.814436 2009993984 solver.cpp:445] Iteration 59202, lr = 1e-06
+I1223 16:56:49.376868 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_59616.caffemodel
+I1223 16:56:49.379179 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_59616.solverstate
+I1223 16:56:49.381131 2009993984 solver.cpp:264] Iteration 59616, Testing net (#0)
+I1223 16:57:04.190522 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0520303 (* 1 = 0.0520303 loss)
+I1223 16:57:04.416129 2009993984 solver.cpp:209] Iteration 59616, loss = 0.0574409
+I1223 16:57:04.416164 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0574409 (* 1 = 0.0574409 loss)
+I1223 16:57:04.416173 2009993984 solver.cpp:445] Iteration 59616, lr = 1e-06
+I1223 16:58:40.749074 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_60030.caffemodel
+I1223 16:58:40.754379 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_60030.solverstate
+I1223 16:58:40.756368 2009993984 solver.cpp:264] Iteration 60030, Testing net (#0)
+I1223 16:58:55.729375 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0519305 (* 1 = 0.0519305 loss)
+I1223 16:58:55.972486 2009993984 solver.cpp:209] Iteration 60030, loss = 0.0566076
+I1223 16:58:55.972518 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0566076 (* 1 = 0.0566076 loss)
+I1223 16:58:55.972527 2009993984 solver.cpp:445] Iteration 60030, lr = 1e-06
+I1223 17:00:28.885401 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_60444.caffemodel
+I1223 17:00:28.888144 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_60444.solverstate
+I1223 17:00:28.890317 2009993984 solver.cpp:264] Iteration 60444, Testing net (#0)
+I1223 17:00:43.828060 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0518713 (* 1 = 0.0518713 loss)
+I1223 17:00:44.070559 2009993984 solver.cpp:209] Iteration 60444, loss = 0.0559666
+I1223 17:00:44.070591 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0559666 (* 1 = 0.0559666 loss)
+I1223 17:00:44.070600 2009993984 solver.cpp:445] Iteration 60444, lr = 1e-06
+I1223 17:02:16.618563 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_60858.caffemodel
+I1223 17:02:16.620746 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_60858.solverstate
+I1223 17:02:16.622616 2009993984 solver.cpp:264] Iteration 60858, Testing net (#0)
+I1223 17:02:31.265097 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0518157 (* 1 = 0.0518157 loss)
+I1223 17:02:31.485417 2009993984 solver.cpp:209] Iteration 60858, loss = 0.0559046
+I1223 17:02:31.485453 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0559046 (* 1 = 0.0559046 loss)
+I1223 17:02:31.485461 2009993984 solver.cpp:445] Iteration 60858, lr = 1e-06
+I1223 17:04:04.102008 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_61272.caffemodel
+I1223 17:04:04.106449 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_61272.solverstate
+I1223 17:04:04.108335 2009993984 solver.cpp:264] Iteration 61272, Testing net (#0)
+I1223 17:04:18.810421 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0517392 (* 1 = 0.0517392 loss)
+I1223 17:04:19.038295 2009993984 solver.cpp:209] Iteration 61272, loss = 0.0557953
+I1223 17:04:19.038327 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0557953 (* 1 = 0.0557953 loss)
+I1223 17:04:19.038334 2009993984 solver.cpp:445] Iteration 61272, lr = 1e-06
+I1223 17:05:51.629477 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_61686.caffemodel
+I1223 17:05:51.634724 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_61686.solverstate
+I1223 17:05:51.636780 2009993984 solver.cpp:264] Iteration 61686, Testing net (#0)
+I1223 17:06:06.569864 2009993984 solver.cpp:315]     Test net output #0: loss = 0.051673 (* 1 = 0.051673 loss)
+I1223 17:06:06.793352 2009993984 solver.cpp:209] Iteration 61686, loss = 0.0552166
+I1223 17:06:06.793381 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0552166 (* 1 = 0.0552166 loss)
+I1223 17:06:06.793393 2009993984 solver.cpp:445] Iteration 61686, lr = 1e-06
+I1223 17:07:45.207115 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_62100.caffemodel
+I1223 17:07:45.209386 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_62100.solverstate
+I1223 17:07:45.211304 2009993984 solver.cpp:264] Iteration 62100, Testing net (#0)
+I1223 17:08:00.228107 2009993984 solver.cpp:315]     Test net output #0: loss = 0.051596 (* 1 = 0.051596 loss)
+I1223 17:08:00.455016 2009993984 solver.cpp:209] Iteration 62100, loss = 0.0558545
+I1223 17:08:00.455054 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0558545 (* 1 = 0.0558545 loss)
+I1223 17:08:00.455062 2009993984 solver.cpp:445] Iteration 62100, lr = 1e-06
+I1223 17:09:38.569918 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_62514.caffemodel
+I1223 17:09:38.574877 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_62514.solverstate
+I1223 17:09:38.576786 2009993984 solver.cpp:264] Iteration 62514, Testing net (#0)
+I1223 17:09:53.535034 2009993984 solver.cpp:315]     Test net output #0: loss = 0.051527 (* 1 = 0.051527 loss)
+I1223 17:09:53.755558 2009993984 solver.cpp:209] Iteration 62514, loss = 0.055413
+I1223 17:09:53.755589 2009993984 solver.cpp:224]     Train net output #0: loss = 0.055413 (* 1 = 0.055413 loss)
+I1223 17:09:53.755617 2009993984 solver.cpp:445] Iteration 62514, lr = 1e-06
+I1223 17:11:26.997637 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_62928.caffemodel
+I1223 17:11:27.000010 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_62928.solverstate
+I1223 17:11:27.001971 2009993984 solver.cpp:264] Iteration 62928, Testing net (#0)
+I1223 17:11:42.272224 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0514718 (* 1 = 0.0514718 loss)
+I1223 17:11:42.503175 2009993984 solver.cpp:209] Iteration 62928, loss = 0.0550751
+I1223 17:11:42.503207 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0550751 (* 1 = 0.0550751 loss)
+I1223 17:11:42.503218 2009993984 solver.cpp:445] Iteration 62928, lr = 1e-06
+I1223 17:13:16.057838 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_63342.caffemodel
+I1223 17:13:16.060020 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_63342.solverstate
+I1223 17:13:16.061871 2009993984 solver.cpp:264] Iteration 63342, Testing net (#0)
+I1223 17:13:30.704301 2009993984 solver.cpp:315]     Test net output #0: loss = 0.051391 (* 1 = 0.051391 loss)
+I1223 17:13:30.925387 2009993984 solver.cpp:209] Iteration 63342, loss = 0.0524717
+I1223 17:13:30.925417 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0524717 (* 1 = 0.0524717 loss)
+I1223 17:13:30.925426 2009993984 solver.cpp:445] Iteration 63342, lr = 1e-06
+I1223 17:15:03.467576 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_63756.caffemodel
+I1223 17:15:03.473144 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_63756.solverstate
+I1223 17:15:03.475010 2009993984 solver.cpp:264] Iteration 63756, Testing net (#0)
+I1223 17:15:18.106653 2009993984 solver.cpp:315]     Test net output #0: loss = 0.051303 (* 1 = 0.051303 loss)
+I1223 17:15:18.333964 2009993984 solver.cpp:209] Iteration 63756, loss = 0.0512639
+I1223 17:15:18.333999 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0512639 (* 1 = 0.0512639 loss)
+I1223 17:15:18.334007 2009993984 solver.cpp:445] Iteration 63756, lr = 1e-06
+I1223 17:16:51.333986 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_64170.caffemodel
+I1223 17:16:51.339284 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_64170.solverstate
+I1223 17:16:51.341218 2009993984 solver.cpp:264] Iteration 64170, Testing net (#0)
+I1223 17:17:05.776324 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0512314 (* 1 = 0.0512314 loss)
+I1223 17:17:06.004236 2009993984 solver.cpp:209] Iteration 64170, loss = 0.0519442
+I1223 17:17:06.004273 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0519442 (* 1 = 0.0519442 loss)
+I1223 17:17:06.004281 2009993984 solver.cpp:445] Iteration 64170, lr = 1e-06
+I1223 17:18:38.185124 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_64584.caffemodel
+I1223 17:18:38.187369 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_64584.solverstate
+I1223 17:18:38.189352 2009993984 solver.cpp:264] Iteration 64584, Testing net (#0)
+I1223 17:18:52.834386 2009993984 solver.cpp:315]     Test net output #0: loss = 0.051173 (* 1 = 0.051173 loss)
+I1223 17:18:53.061907 2009993984 solver.cpp:209] Iteration 64584, loss = 0.051948
+I1223 17:18:53.061939 2009993984 solver.cpp:224]     Train net output #0: loss = 0.051948 (* 1 = 0.051948 loss)
+I1223 17:18:53.061945 2009993984 solver.cpp:445] Iteration 64584, lr = 1e-06
+I1223 17:20:25.566783 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_64998.caffemodel
+I1223 17:20:25.568924 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_64998.solverstate
+I1223 17:20:25.570770 2009993984 solver.cpp:264] Iteration 64998, Testing net (#0)
+I1223 17:20:40.291409 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0511113 (* 1 = 0.0511113 loss)
+I1223 17:20:40.512115 2009993984 solver.cpp:209] Iteration 64998, loss = 0.0514555
+I1223 17:20:40.512151 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0514555 (* 1 = 0.0514555 loss)
+I1223 17:20:40.512162 2009993984 solver.cpp:445] Iteration 64998, lr = 1e-06
+I1223 17:22:17.789777 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_65412.caffemodel
+I1223 17:22:17.795068 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_65412.solverstate
+I1223 17:22:17.796995 2009993984 solver.cpp:264] Iteration 65412, Testing net (#0)
+I1223 17:22:32.439847 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0510532 (* 1 = 0.0510532 loss)
+I1223 17:22:32.660994 2009993984 solver.cpp:209] Iteration 65412, loss = 0.0520077
+I1223 17:22:32.661026 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0520077 (* 1 = 0.0520077 loss)
+I1223 17:22:32.661034 2009993984 solver.cpp:445] Iteration 65412, lr = 1e-06
+I1223 17:24:04.765646 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_65826.caffemodel
+I1223 17:24:04.770902 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_65826.solverstate
+I1223 17:24:04.772830 2009993984 solver.cpp:264] Iteration 65826, Testing net (#0)
+I1223 17:24:19.418627 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0509884 (* 1 = 0.0509884 loss)
+I1223 17:24:19.640326 2009993984 solver.cpp:209] Iteration 65826, loss = 0.0488801
+I1223 17:24:19.640358 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0488801 (* 1 = 0.0488801 loss)
+I1223 17:24:19.640365 2009993984 solver.cpp:445] Iteration 65826, lr = 1e-06
+I1223 17:25:58.474735 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_66240.caffemodel
+I1223 17:25:58.479311 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_66240.solverstate
+I1223 17:25:58.482223 2009993984 solver.cpp:264] Iteration 66240, Testing net (#0)
+I1223 17:26:14.329484 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0509222 (* 1 = 0.0509222 loss)
+I1223 17:26:14.559461 2009993984 solver.cpp:209] Iteration 66240, loss = 0.0498007
+I1223 17:26:14.559492 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0498007 (* 1 = 0.0498007 loss)
+I1223 17:26:14.559499 2009993984 solver.cpp:445] Iteration 66240, lr = 1e-06
+I1223 17:27:49.977258 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_66654.caffemodel
+I1223 17:27:49.982439 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_66654.solverstate
+I1223 17:27:49.984288 2009993984 solver.cpp:264] Iteration 66654, Testing net (#0)
+I1223 17:28:06.525578 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0508443 (* 1 = 0.0508443 loss)
+I1223 17:28:06.805012 2009993984 solver.cpp:209] Iteration 66654, loss = 0.0477865
+I1223 17:28:06.805065 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0477865 (* 1 = 0.0477865 loss)
+I1223 17:28:06.805076 2009993984 solver.cpp:445] Iteration 66654, lr = 1e-06
+I1223 17:29:47.424006 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_67068.caffemodel
+I1223 17:29:47.426354 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_67068.solverstate
+I1223 17:29:47.428449 2009993984 solver.cpp:264] Iteration 67068, Testing net (#0)
+I1223 17:30:03.909770 2009993984 solver.cpp:315]     Test net output #0: loss = 0.050778 (* 1 = 0.050778 loss)
+I1223 17:30:04.134414 2009993984 solver.cpp:209] Iteration 67068, loss = 0.0473984
+I1223 17:30:04.134448 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0473984 (* 1 = 0.0473984 loss)
+I1223 17:30:04.134459 2009993984 solver.cpp:445] Iteration 67068, lr = 1e-06
+I1223 17:31:44.502771 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_67482.caffemodel
+I1223 17:31:44.505179 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_67482.solverstate
+I1223 17:31:44.507499 2009993984 solver.cpp:264] Iteration 67482, Testing net (#0)
+I1223 17:32:01.623371 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0507204 (* 1 = 0.0507204 loss)
+I1223 17:32:01.973748 2009993984 solver.cpp:209] Iteration 67482, loss = 0.0469603
+I1223 17:32:01.973784 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0469603 (* 1 = 0.0469603 loss)
+I1223 17:32:01.973795 2009993984 solver.cpp:445] Iteration 67482, lr = 1e-06
+I1223 17:33:38.651159 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_67896.caffemodel
+I1223 17:33:38.656440 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_67896.solverstate
+I1223 17:33:38.658398 2009993984 solver.cpp:264] Iteration 67896, Testing net (#0)
+I1223 17:33:54.045866 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0506635 (* 1 = 0.0506635 loss)
+I1223 17:33:54.270944 2009993984 solver.cpp:209] Iteration 67896, loss = 0.0461989
+I1223 17:33:54.270978 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0461989 (* 1 = 0.0461989 loss)
+I1223 17:33:54.270987 2009993984 solver.cpp:445] Iteration 67896, lr = 1e-06
+I1223 17:35:26.831749 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_68310.caffemodel
+I1223 17:35:26.837427 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_68310.solverstate
+I1223 17:35:26.839658 2009993984 solver.cpp:264] Iteration 68310, Testing net (#0)
+I1223 17:35:41.607574 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0505974 (* 1 = 0.0505974 loss)
+I1223 17:35:41.828496 2009993984 solver.cpp:209] Iteration 68310, loss = 0.0445038
+I1223 17:35:41.828528 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0445038 (* 1 = 0.0445038 loss)
+I1223 17:35:41.828537 2009993984 solver.cpp:445] Iteration 68310, lr = 1e-06
+I1223 17:37:14.808568 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_68724.caffemodel
+I1223 17:37:14.813594 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_68724.solverstate
+I1223 17:37:14.815611 2009993984 solver.cpp:264] Iteration 68724, Testing net (#0)
+I1223 17:37:30.875500 2009993984 solver.cpp:315]     Test net output #0: loss = 0.050549 (* 1 = 0.050549 loss)
+I1223 17:37:31.137717 2009993984 solver.cpp:209] Iteration 68724, loss = 0.046345
+I1223 17:37:31.137745 2009993984 solver.cpp:224]     Train net output #0: loss = 0.046345 (* 1 = 0.046345 loss)
+I1223 17:37:31.137754 2009993984 solver.cpp:445] Iteration 68724, lr = 1e-06
+I1223 17:39:08.444018 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_69138.caffemodel
+I1223 17:39:08.449084 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_69138.solverstate
+I1223 17:39:08.451069 2009993984 solver.cpp:264] Iteration 69138, Testing net (#0)
+I1223 17:39:23.438199 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0505031 (* 1 = 0.0505031 loss)
+I1223 17:39:23.668478 2009993984 solver.cpp:209] Iteration 69138, loss = 0.0463574
+I1223 17:39:23.668514 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0463574 (* 1 = 0.0463574 loss)
+I1223 17:39:23.668522 2009993984 solver.cpp:445] Iteration 69138, lr = 1e-06
+I1223 17:41:16.361541 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_69552.caffemodel
+I1223 17:41:16.366475 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_69552.solverstate
+I1223 17:41:16.368471 2009993984 solver.cpp:264] Iteration 69552, Testing net (#0)
+I1223 17:41:31.401376 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0504603 (* 1 = 0.0504603 loss)
+I1223 17:41:31.623913 2009993984 solver.cpp:209] Iteration 69552, loss = 0.047412
+I1223 17:41:31.623942 2009993984 solver.cpp:224]     Train net output #0: loss = 0.047412 (* 1 = 0.047412 loss)
+I1223 17:41:31.623950 2009993984 solver.cpp:445] Iteration 69552, lr = 1e-06
+I1223 17:43:16.027822 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_69966.caffemodel
+I1223 17:43:16.032325 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_69966.solverstate
+I1223 17:43:16.034178 2009993984 solver.cpp:264] Iteration 69966, Testing net (#0)
+I1223 17:43:30.653548 2009993984 solver.cpp:315]     Test net output #0: loss = 0.050399 (* 1 = 0.050399 loss)
+I1223 17:43:30.874441 2009993984 solver.cpp:209] Iteration 69966, loss = 0.046903
+I1223 17:43:30.874474 2009993984 solver.cpp:224]     Train net output #0: loss = 0.046903 (* 1 = 0.046903 loss)
+I1223 17:43:30.874482 2009993984 solver.cpp:445] Iteration 69966, lr = 1e-06
+I1223 17:45:05.550974 2009993984 solver.cpp:334] Snapshotting to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_70380.caffemodel
+I1223 17:45:05.555371 2009993984 solver.cpp:342] Snapshotting solver state to /Users/JamesGuo/Documents/MasterThesis/landmark/landmark1000_result/landmark1000_train_iter_70380.solverstate
+I1223 17:45:05.557232 2009993984 solver.cpp:264] Iteration 70380, Testing net (#0)
+I1223 17:45:22.025460 2009993984 solver.cpp:315]     Test net output #0: loss = 0.0503462 (* 1 = 0.0503462 loss)
+I1223 17:45:22.249475 2009993984 solver.cpp:209] Iteration 70380, loss = 0.0472773
+I1223 17:45:22.249511 2009993984 solver.cpp:224]     Train net output #0: loss = 0.0472773 (* 1 = 0.0472773 loss)
+I1223 17:45:22.249523 2009993984 solver.cpp:445] Iteration 70380, lr = 1e-06
