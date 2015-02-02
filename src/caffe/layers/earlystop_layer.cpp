@@ -2,6 +2,7 @@
 #include <vector>
 #include <limits>
 #include <fstream>
+#include <cmath>
 
 #include "caffe/layer.hpp"
 #include "caffe/util/math_functions.hpp"
@@ -49,15 +50,13 @@ namespace caffe{
         path_tmp_ = early_param.path_tmp();
         //LOG(INFO) << "path_tmp is " << path_tmp_ << std::endl;
         iter_test_ = early_param.iter_test();                  // Number of iterations per test
-        iter_train_ = early_param.iter_train();                 // Number of iterations per train epoch
+        iter_train_ = early_param.iter_train();                // Number of iterations per train epoch
         
         stop = false;
-        median = 0;
         minimum = 0;
         sum_loss = 0;
         index = 0;
-        val_list[0] = 0;
-        val_list[1] = 0;
+        val_list.assign(time_interval_, Dtype(0));            // Assign time_interval_ Dtypes with 0 
         
         CHECK_EQ(bottom[0]->count(), 1) << "The input must be single Loss value";
     }
@@ -77,23 +76,23 @@ namespace caffe{
         Dtype val_loss_mean = 0;
         top[0]->mutable_cpu_data()[0] = bottom_data[0];
         if (Caffe::phase() == Caffe::TRAIN) {
-            if (train_loss.size() > time_interval_ && index % iter_train_ == 1) {
+            if (index / iter_train_ > time_interval_ && index % iter_train_ == 1) {         // Only start to check after time_interval_ epochs
                 LOG(INFO) << "Start CHECKING" << std::endl;
                 std::ifstream tmp2(path_tmp_.c_str(), std::ios::in | std::ios::binary);
-                tmp2.read((char *) &val_list, sizeof(val_list));
+                tmp2.read(reinterpret_cast<char*>(&val_list[0]), val_list.size()*sizeof(Dtype));
                 tmp2.close();
-                //LOG(INFO) << "Read min_val " << val_list[0] << " from tmp.bin" << std::endl;
-                //LOG(INFO) << "Read current_val " << val_list[1] << " from tmp.bin" << std::endl;
-                minimum = EarlystopLayer<Dtype>::find_min(train_loss, time_interval_);
-                //median = EarlystopLayer<Dtype>::find_median(train_loss, time_interval_);
-                sum_loss = EarlystopLayer<Dtype>::sum_lastk(train_loss, time_interval_);
-                //LOG(INFO) << "MINIMUM is " << minimum << std::endl;
-                //LOG(INFO) << "MEDIAN is " << median << std::endl;
-                //LOG(INFO) << "SUM is " << sum_loss << std::endl;
-                tmp = sum_loss / (time_interval_ * minimum);
-                tmp = (val_list[1] / val_list[0] - 1) / tmp / lamina_;
+                minimum = EarlystopLayer<Dtype>::find_min(val_list, time_interval_);
+                //sum_loss = EarlystopLayer<Dtype>::sum_lastk(val_list, time_interval_);
+                LOG(INFO) << "MINIMUM is " << minimum << std::endl;
+                for (int idx = 0; idx < val_list.size() - 1; idx++) {
+                    if ((val_list[idx] - val_list[idx+1]) > 0) {
+                        tmp += fabs(val_list[idx] - val_list[idx+1]) / val_list[idx];
+                    }
+                }
+                tmp = tmp / (val_list.size() - 1);
+                tmp = tmp * lamina_;
                 LOG(INFO) << "The value for comparison is " << tmp << std::endl;
-                if (tmp > threshold_) {
+                if (tmp < threshold_) {
                     stop = true;
                 }
                 
@@ -108,37 +107,25 @@ namespace caffe{
                 train_loss.push_back(bottom_data[0]);
             }
             index = index + 1;
-            //LOG(INFO) << "index is " << index << std::endl;
-            //LOG(INFO) << "Size of train_loss is " << train_loss.size() << std::endl;
-            //LOG(INFO) << "Passed Loss Value is " << bottom_data[0] << std::endl;
-            //LOG(INFO) << "EARLYSTOP Training phase, latest train loss is " << train_loss.back() << std::endl;
             
         } else if (Caffe::phase() == Caffe::TEST) {
             //LOG(INFO) << "EARLYSTOP Testing phase" << std::endl;
             val_loss.push_back(bottom_data[0]);
             if (val_loss.size() > 0 && val_loss.size() % iter_test_ == 0) {
                 val_loss_mean = EarlystopLayer<Dtype>::sum_lastk(val_loss, iter_test_) / iter_test_;
-                if (val_list[0] == 0) {
-                    val_list[0] = val_loss_mean;
-                    val_list[1] = val_loss_mean;
-                    std::ofstream tmp1(path_tmp_.c_str(), std::ios::out | std::ios::binary);
-                    tmp1.write((char *) &val_list, sizeof(val_list));
-                    tmp1.close();
+                if (val_list.size() > (val_loss.size() / iter_test_ - 1)) {
+                    val_list[val_loss.size() / iter_test_ - 1] = val_loss_mean;
                 } else {
-                    if (val_list[0] > val_loss_mean) {
-                        val_list[0] = val_loss_mean;
+                    for (int idx = 0; idx < val_list.size() - 1; idx ++) {
+                        val_list[idx] = val_list[idx + 1];
                     }
-                    val_list[1] = val_loss_mean;
-                    std::ofstream tmp1(path_tmp_.c_str(), std::ios::out | std::ios::binary);
-                    tmp1.write((char *) &val_list, sizeof(val_list));
-                    tmp1.close();
+                    val_list[val_list.size() - 1] = val_loss_mean;
                 }
-                
-                //LOG(INFO) << "Wrote min_val " << val_list[0] << " to tmp.bin" << std::endl;
-                //LOG(INFO) << "Wrote current_val " << val_list[1] << " to tmp.bin" << std::endl;
+
+                std::ofstream tmp1(path_tmp_.c_str(), std::ios::out | std::ios::binary);
+                tmp1.write(reinterpret_cast<char*>(&val_list[0]), val_list.size()*sizeof(Dtype));
+                tmp1.close();
             }
-            
-            //LOG(INFO) << "iter_test is " << iter_test << std::endl;
         }
     }
     

@@ -24,12 +24,16 @@ void SplitLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
   }
   //////////////////////////////////////////////////////////////////////////////
   // James added code
-  if (top[0]->count() == 1 && top[1]->count() == 1 && top[1]->cpu_diff()[0] == 1.5) {
-    top[0]->mutable_cpu_diff()[0] = 0;
-    top[1]->mutable_cpu_diff()[0] = 0;
+  const Dtype* top0_diff = top[0]->cpu_diff();
+  const Dtype* top1_diff = top[1]->cpu_diff();
+  Dtype* top0_diff_m = top[0]->mutable_cpu_diff();
+  Dtype* top1_diff_m = top[1]->mutable_cpu_diff();
+  if (top[0]->count() == 1 && top[1]->count() == 1 && top1_diff[0] == 1.5) {
+    top0_diff_m[0] = 0;
+    top1_diff_m[0] = 0;
   }
-  //LOG(INFO) << "split 0 gpu_diff is " << top[0]->cpu_diff()[0] <<std::endl;
-  //LOG(INFO) << "split 1 gpu_diff is " << top[1]->cpu_diff()[0] <<std::endl;
+  //LOG(INFO) << "split 0 gpu_diff is " << top0_diff[0] <<std::endl;
+  //LOG(INFO) << "split 1 gpu_diff is " << top1_diff[0] <<std::endl;
   // James added code
   //////////////////////////////////////////////////////////////////////////////
   caffe_gpu_add(count_, top[0]->gpu_diff(), top[1]->gpu_diff(),

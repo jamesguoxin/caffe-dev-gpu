@@ -520,14 +520,14 @@ protected:
     virtual Dtype find_min(const std::vector<Dtype> loss_sequence, const size_t k);
     virtual Dtype find_median(const std::vector<Dtype> loss_sequence, const size_t k);
     virtual Dtype sum_lastk(const std::vector<Dtype> loss_sequence, const size_t k);
-    // The method is from "Facial Landmark Detection by Deep Multi-task
-    // Learning" CUHK
-    float threshold_;          // ε in original paper
-    float lamina_;             // λ in original paper, also the loss weight for
-                               // previous loss layer
-    size_t time_interval_;     // k in original paper, to check how many iterations
-                               // we want to check
-    std::string path_tmp_;
+    // THE Early Stopping Criteria based only on Val_Loss
+    float threshold_;          // threshold used to determin
+    float lamina_;             // the loss weight for previous loss layer
+                               // 
+    size_t time_interval_;     // number of epochs we want to check
+    
+    std::string path_tmp_;     // path to store tmp file used to communicate between 
+                               // training and testing phase
     int iter_test_;
     int iter_train_;
     int index;
@@ -536,12 +536,11 @@ protected:
                                // stop training, false is to continue
     std::vector<Dtype> train_loss;
     std::vector<Dtype> val_loss;
-    Dtype median;
     Dtype minimum;
     Dtype sum_loss;
-    Dtype val_list[2];         // val_list[0] = minimunal val value so far
-                               // val_list[1] = current val value
-    
+    std::vector<Dtype> val_list;         // latest time_interval_ value for validation loss, 
+                                         // These are used to compute value to compare with threshold
+
 };
 
 }  // namespace caffe
